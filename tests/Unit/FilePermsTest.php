@@ -94,7 +94,7 @@ final class FilePermsTest extends TestCase
             ->fix();
 
         self::assertSame(
-            $this->isWindows() ? 0666 : 0400,
+            0400,
             $this->getPerms(self::ROOT . '/foo/400.php')
         );
     }
@@ -110,15 +110,13 @@ final class FilePermsTest extends TestCase
             ->fix();
 
         self::assertSame(
-            $this->isWindows() ? 0666 : 0644,
+            0644,
             $this->getPerms(self::ROOT . '/foo/400.php')
         );
     }
 
     public function testFolderPermissionIsNotChangedIfAllowedModeFolders(): void
     {
-        var_dump($this->getPerms(self::ROOT . '/baz'));
-
         (new FilePermissions([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
@@ -144,7 +142,7 @@ final class FilePermsTest extends TestCase
             ->fix();
 
         self::assertSame(
-            $this->isWindows() ? 0777 : 0755,
+            0755,
             $this->getPerms(self::ROOT . '/baz')
         );
     }
@@ -160,7 +158,7 @@ final class FilePermsTest extends TestCase
             ->fix();
 
         self::assertSame(
-            $this->isWindows() ? 0666 : 0644,
+            0644,
             $this->getPerms(self::ROOT . '/bar/666.php')
         );
     }
@@ -280,7 +278,7 @@ final class FilePermsTest extends TestCase
             ->dryRun();
 
         self::assertTrue(
-            $this->isWindows() ? [] == $result : [] !== $result
+            [] !== $result
         );
     }
 
@@ -295,7 +293,7 @@ final class FilePermsTest extends TestCase
             ->dryRun();
 
         self::assertTrue(
-            $this->isWindows() ? [] === $result : !\in_array('foo', $result, true)
+            !\in_array('foo', $result, true)
         );
     }
 
@@ -310,7 +308,7 @@ final class FilePermsTest extends TestCase
             ->dryRun();
 
         self::assertTrue(
-            $this->isWindows() ? [] === $result : !\in_array('444.php', $result, true)
+            !\in_array('444.php', $result, true)
         );
     }
 
