@@ -12,7 +12,7 @@ namespace MathiasReker\Model;
 
 use MathiasReker\Exception\InvalidArgumentException;
 
-final class FilePermissions
+final class FilePermission
 {
     private int $defaultModeFiles = 0644;
 
