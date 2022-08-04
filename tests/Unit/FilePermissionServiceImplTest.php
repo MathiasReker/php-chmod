@@ -12,7 +12,7 @@ namespace Tests\Unit;
 
 use FilesystemIterator;
 use MathiasReker\Exception\InvalidArgumentException;
-use MathiasReker\FilePermissions;
+use MathiasReker\FilePerm;
 use MathiasReker\Util\OperativeSystem;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
@@ -21,11 +21,11 @@ use RecursiveIteratorIterator;
 /**
  * @internal
  *
- * @covers \FilePermissions
+ * @covers \FilePermissionServiceImpl
  *
  * @small
  */
-final class FilePermissionsTest extends TestCase
+final class FilePermissionServiceImplTest extends TestCase
 {
     private const FILE_PERMS = [
         '400.php' => 0400,
@@ -54,7 +54,7 @@ final class FilePermissionsTest extends TestCase
 
     public function testFilePermissionIsNotChangedIfAllowedModeFiles(): void
     {
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([0400])
@@ -75,7 +75,7 @@ final class FilePermissionsTest extends TestCase
 
     public function testFilePermissionIsChangedIfNotAllowedModeFiles(): void
     {
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -91,7 +91,7 @@ final class FilePermissionsTest extends TestCase
 
     public function testFolderPermissionIsNotChangedIfAllowedModeFolders(): void
     {
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -107,7 +107,7 @@ final class FilePermissionsTest extends TestCase
 
     public function testFolderPermissionIsChangedIfNotAllowedModeFolders(): void
     {
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -123,7 +123,7 @@ final class FilePermissionsTest extends TestCase
 
     public function testFilePermissionIsChangedIfDifferentToDefault(): void
     {
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -141,7 +141,7 @@ final class FilePermissionsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(-1)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -154,7 +154,7 @@ final class FilePermissionsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(1)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -167,7 +167,7 @@ final class FilePermissionsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(-1)
             ->setAllowedModeFiles([])
@@ -180,7 +180,7 @@ final class FilePermissionsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(1)
             ->setAllowedModeFiles([])
@@ -193,7 +193,7 @@ final class FilePermissionsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -206,7 +206,7 @@ final class FilePermissionsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -219,7 +219,7 @@ final class FilePermissionsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([1])
@@ -232,7 +232,7 @@ final class FilePermissionsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePermissions([self::ROOT]))
+        (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([1])
@@ -243,7 +243,7 @@ final class FilePermissionsTest extends TestCase
 
     public function testDryRun(): void
     {
-        $result = (new FilePermissions([self::ROOT]))
+        $result = (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -258,7 +258,7 @@ final class FilePermissionsTest extends TestCase
 
     public function testExcludedFolders(): void
     {
-        $result = (new FilePermissions([self::ROOT]))
+        $result = (new FilePerm([self::ROOT]))
             ->setExclude(['foo'])
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
@@ -274,7 +274,7 @@ final class FilePermissionsTest extends TestCase
 
     public function testExcludedFiles(): void
     {
-        $result = (new FilePermissions([self::ROOT]))
+        $result = (new FilePerm([self::ROOT]))
             ->setExclude(['444.php'])
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)

@@ -8,14 +8,16 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker;
+namespace MathiasReker\Service\impl;
 
+use MathiasReker\Model;
 use MathiasReker\Model\FilePermissionsData;
+use MathiasReker\Service\FilePermissionService;
 use MathiasReker\Util\Iterator\Iterator;
 use MathiasReker\Util\OperativeSystem;
 use RecursiveIteratorIterator;
 
-final class FilePermissions implements FilePermsInterface
+class FilePermissionServiceImpl implements FilePermissionService
 {
     private Iterator $iterator;
 

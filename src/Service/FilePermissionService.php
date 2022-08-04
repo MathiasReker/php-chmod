@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker;
+namespace MathiasReker\Service;
 
-interface FilePermsInterface
+interface FilePermissionService
 {
     public function dryRun();
 
