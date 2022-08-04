@@ -253,8 +253,9 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->dryRun();
 
-        self::assertTrue(
-            [] !== $result
+        self::assertNotSame(
+            [],
+            $result
         );
     }
 
@@ -299,7 +300,7 @@ final class FilePermissionServiceImplTest extends TestCase
         foreach (self::FOLDER_PERMS as $directory => $directoryPerm) {
             foreach (self::FILE_PERMS as $file => $filePerm) {
                 (new FileSystemCache(self::ROOT . '/' . $directory, $directoryPerm))
-                    ->store((string) $file, $filePerm);
+                    ->store($file, $filePerm);
             }
         }
     }
