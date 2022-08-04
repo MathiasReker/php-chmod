@@ -92,41 +92,41 @@ $result->setDefaultModeFolder(0755);
 `setAllowedModeFiles` sets the allowed permissions for files. Files with these permissions will be skipped:
 
 ```php
-$result->setAllowedModeFiles([0400, 0444, 0640])
+$result->setAllowedModeFiles([0400, 0444, 0640]);
 ```
 
 `setAllowedModeFolders` sets the allowed permissions for folders. Folders with these permissions will be skipped:
 
 ```php
-$result->setAllowedModeFolders([0750])
+$result->setAllowedModeFolders([0750]);
 ```
 
 `scan` finds all the concerned files/folders:
 
 ```php
-$result->scan()
+$result->scan();
 ```
 
 `setConcernedPaths` sets concerned files manually. This is useful if you want to use a custom scanner:
 
 ```php
-$result->setConcernedPaths($paths)
+$result->setConcernedPaths($paths);
 ```
 
 `dryRun` run returns an array of concerned files/folders:
 
 ```php
-$result->dryRun()
+$result->dryRun();
 ```
 
 `fix` changes the concerned files/folders permission to the default mode:
 
 ```php
-$result->fix()
+$result->fix();
 ```
 
 `exclude` excludes a list of files/folder names (not paths):
 
 ```php
-$result->exclude(['.docker'])
+$result->exclude(['.docker']);
 ```
