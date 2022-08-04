@@ -27,6 +27,9 @@ use RecursiveIteratorIterator;
  */
 final class FilePermissionServiceImplTest extends TestCase
 {
+    /**
+     * @var array<string, int>
+     */
     private const FILE_PERMS = [
         '400.php' => 0400,
         '444.php' => 0444,
@@ -46,7 +49,6 @@ final class FilePermissionServiceImplTest extends TestCase
         'bar' => 0750,
         'baz' => 0777,
     ];
-
     /**
      * @var string
      */

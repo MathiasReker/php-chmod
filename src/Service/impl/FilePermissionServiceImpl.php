@@ -94,8 +94,9 @@ class FilePermissionServiceImpl implements FilePermissionService
     /**
      * @param int[] $allowedModeFolders
      */
-    public function setAllowedModeFolders(array $allowedModeFolders): self
-    {
+    public function setAllowedModeFolders(
+        array $allowedModeFolders
+    ): self {
         $this->filePermissions->setAllowedModeFolders($allowedModeFolders);
 
         return $this;
@@ -127,10 +128,8 @@ class FilePermissionServiceImpl implements FilePermissionService
                 if (\in_array($currentMode, $this->filePermissions->getAllowedModeFolders(), true)) {
                     continue;
                 }
-            } else {
-                if (\in_array($currentMode, $this->filePermissions->getAllowedModeFiles(), true)) {
-                    continue;
-                }
+            } elseif (\in_array($currentMode, $this->filePermissions->getAllowedModeFiles(), true)) {
+                continue;
             }
 
             $this->filePermissions->addDisallowedModePaths($path->getRealPath());

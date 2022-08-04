@@ -12,6 +12,6 @@ namespace MathiasReker;
 
 use MathiasReker\Service\impl\FilePermissionServiceImpl;
 
-class FilePerm extends FilePermissionServiceImpl
+final class FilePerm extends FilePermissionServiceImpl
 {
 }

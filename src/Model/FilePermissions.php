@@ -36,7 +36,7 @@ final class FilePermissions
     /**
      * @var string[]
      */
-    private array $directories;
+    private array $directories = [];
 
     /**
      * @var string[]
@@ -62,11 +62,6 @@ final class FilePermissions
         return $this;
     }
 
-    private function isValidMode(int $mode): bool
-    {
-        return \in_array(mb_strlen(decoct($mode)), [3, 4], true);
-    }
-
     public function setDefaultModeFolder(int $defaultModeFolders): self
     {
         if (!$this->isValidMode($defaultModeFolders)) {
@@ -78,6 +73,9 @@ final class FilePermissions
         return $this;
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedModeFiles(): array
     {
         return $this->allowedModeFiles;
@@ -99,6 +97,9 @@ final class FilePermissions
         return $this;
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedModeFolders(): array
     {
         return $this->allowedModeFolders;
@@ -107,8 +108,9 @@ final class FilePermissions
     /**
      * @param int[] $allowedModeFolders
      */
-    public function setAllowedModeFolders(array $allowedModeFolders): self
-    {
+    public function setAllowedModeFolders(
+        array $allowedModeFolders
+    ): self {
         foreach ($allowedModeFolders as $allowedModeFolder) {
             if (!$this->isValidMode($allowedModeFolder)) {
                 throw new InvalidArgumentException('Invalid permission.');
@@ -120,11 +122,17 @@ final class FilePermissions
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getDirectories(): array
     {
         return $this->directories;
     }
 
+    /**
+     * @return string[]
+     */
     public function getDisallowedModePaths(): array
     {
         return $this->disallowedModePaths;
@@ -137,11 +145,17 @@ final class FilePermissions
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getExclude(): array
     {
         return $this->exclude;
     }
 
+    /**
+     * @param string[] $exclude
+     */
     public function setExclude(array $exclude): self
     {
         $this->exclude = $exclude;
@@ -157,5 +171,10 @@ final class FilePermissions
     public function getDefaultModeFolders(): int
     {
         return $this->defaultModeFolders;
+    }
+
+    private function isValidMode(int $mode): bool
+    {
+        return \in_array(mb_strlen(decoct($mode)), [3, 4], true);
     }
 }
