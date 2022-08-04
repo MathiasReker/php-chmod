@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace MathiasReker\Service\impl;
 
 use MathiasReker\Model;
-use MathiasReker\Model\FilePermissionsData;
+use MathiasReker\Model\FilePermissions;
 use MathiasReker\Service\FilePermissionService;
 use MathiasReker\Util\Iterator\Iterator;
 use MathiasReker\Util\OperativeSystem;
@@ -21,14 +21,14 @@ class FilePermissionServiceImpl implements FilePermissionService
 {
     private Iterator $iterator;
 
-    private Model\FilePermissionsData $filePermissions;
+    private Model\FilePermissions $filePermissions;
 
     /**
      * @param string[] $directories
      */
     public function __construct(array $directories)
     {
-        $this->filePermissions = new FilePermissionsData($directories);
+        $this->filePermissions = new FilePermissions($directories);
 
         $this->iterator = new Iterator();
     }
