@@ -1,6 +1,7 @@
 <h1 align="center">Php File Permissions</h1>
 
-`PHP File Permissions` is a PHP library for extended work with file permissions.
+`PHP File Permissions` is a PHP library for extended work with file permissions. You can easily change the permissions
+recursively.
 
 [![Packagist Version](https://img.shields.io/packagist/v/MathiasReker/php-file-permissions.svg)](https://packagist.org/packages/MathiasReker/php-file-permissions)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/MathiasReker/php-file-permissions.svg?color=%23ff007f)](https://packagist.org/packages/MathiasReker/php-file-permissions)
@@ -24,10 +25,7 @@
 
 ### Installation
 
-`composer require MathiasReker/php-file-permissions`
-
-Latest stable
-version: [![Latest Stable Version](https://poser.pugx.org/MathiasReker/php-file-permissions/v/stable)](https://packagist.org/packages/MathiasReker/php-file-permissions)
+run `composer require MathiasReker/php-file-permissions`
 
 ### Examples
 
@@ -70,6 +68,8 @@ $result = (new FilePerm([__DIR__]))
 
 var_dump($result); // bool
 ```
+
+### Documentation
 
 The constructor takes an array of directories to scan:
 
