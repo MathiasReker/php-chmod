@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace MathiasReker\Service\impl;
 
-use MathiasReker\Model;
 use MathiasReker\Model\FilePermission;
 use MathiasReker\Service\FilePermissionService;
 use MathiasReker\Util\Iterator\Iterator;
@@ -21,7 +20,7 @@ class FilePermissionServiceImpl implements FilePermissionService
 {
     private Iterator $iterator;
 
-    private Model\FilePermission $filePermissions;
+    private FilePermission $filePermissions;
 
     /**
      * @param string[] $directories
@@ -121,6 +120,8 @@ class FilePermissionServiceImpl implements FilePermissionService
 
     private function checkPerms(RecursiveIteratorIterator $paths): void
     {
+        $result = [];
+
         foreach ($paths as $path) {
             $currentMode = $path->getPerms() & 0777;
 
@@ -132,8 +133,10 @@ class FilePermissionServiceImpl implements FilePermissionService
                 continue;
             }
 
-            $this->filePermissions->addConcernedPaths($path->getRealPath());
+            $result[] = $path->getRealPath();
         }
+
+        $this->filePermissions->addConcernedPaths($result);
     }
 
     public function setConcernedPaths(array $concernedPaths): self

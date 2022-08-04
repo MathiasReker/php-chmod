@@ -271,8 +271,8 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->dryRun();
 
-        self::assertTrue(
-            !\in_array('foo', $result, true)
+        self::assertNotTrue(
+            \in_array('foo', $result, true)
         );
     }
 
@@ -287,8 +287,8 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->dryRun();
 
-        self::assertTrue(
-            !\in_array('444.php', $result, true)
+        self::assertNotTrue(
+            \in_array('444.php', $result, true)
         );
     }
 
@@ -303,8 +303,8 @@ final class FilePermissionServiceImplTest extends TestCase
             ->dryRun();
 
         self::assertSame(
-            [__DIR__ . '/tmp/foo'],
-            $result
+            array_map(static fn ($x) => realpath($x), [__DIR__ . '/tmp/foo']),
+            array_map(static fn ($x) => realpath($x), $result)
         );
     }
 

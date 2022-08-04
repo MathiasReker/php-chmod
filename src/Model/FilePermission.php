@@ -143,7 +143,7 @@ final class FilePermission
      */
     public function addConcernedPaths(array $concernedPaths): self
     {
-        $this->concernedPaths[] = $concernedPaths;
+        $this->concernedPaths += $concernedPaths;
 
         return $this;
     }
