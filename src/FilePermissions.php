@@ -8,58 +8,33 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\FilePermissions;
+namespace MathiasReker;
 
-use InvalidArgumentException;
+use MathiasReker\Util\Iterator\Iterator;
+use MathiasReker\Util\OperativeSystem;
 use RecursiveIteratorIterator;
 
 final class FilePermissions implements FilePermsInterface
 {
-    private IteratorInterface $iterator;
+    private Iterator $iterator;
 
-    private int $defaultModeFiles = 0644;
-
-    private int $defaultModeFolders = 0755;
-
-    /**
-     * @var int[]
-     */
-    private array $allowedModeFiles = [];
-
-    /**
-     * @var int[]
-     */
-    private array $allowedModeFolders = [];
-
-    /**
-     * @var string[]
-     */
-    private array $disallowedModePaths = [];
-
-    /**
-     * @var string[]
-     */
-    private array $directories;
-
-    /**
-     * @var string[]
-     */
-    private array $exclude;
+    private Model\FilePermissionsData $filePermissions;
 
     /**
      * @param string[] $directories
-     * @param string[] $exclude
      */
-    public function __construct(
-        array $directories,
-        array $exclude = [],
-        ?IteratorInterface $iterator = null
-    ) {
-        $this->directories = $directories;
+    public function __construct(array $directories)
+    {
+        $this->iterator = new Iterator();
 
-        $this->exclude = $exclude;
+        $this->filePermissions = new Model\FilePermissionsData($directories);
+    }
 
-        $this->iterator = $iterator ?: new Iterator();
+    public function setExclude($setExclude): self
+    {
+        $this->filePermissions->setExclude($setExclude);
+
+        return $this;
     }
 
     /**
@@ -67,46 +42,38 @@ final class FilePermissions implements FilePermsInterface
      */
     public function dryRun(): array
     {
-        return $this->disallowedModePaths;
+        return $this->filePermissions->getDisallowedModePaths();
     }
 
     public function fix(): void
     {
-        if (empty($this->disallowedModePaths)) {
+        $disallowedModePaths = $this->filePermissions->getDisallowedModePaths();
+
+        if (empty($disallowedModePaths)) {
             return;
         }
 
-        foreach ($this->disallowedModePaths as $disallowedModePath) {
+        foreach ($disallowedModePaths as $disallowedModePath) {
+            clearstatcache();
             chmod(
                 $disallowedModePath,
-                is_dir($disallowedModePath) ? $this->defaultModeFolders : $this->defaultModeFiles
+                is_dir($disallowedModePath)
+                    ? $this->filePermissions->getDefaultModeFolders()
+                    : $this->filePermissions->getDefaultModeFiles()
             );
         }
     }
 
-    public function setDefaultModeFile(int $defaultModeFiles): self
+    public function setDefaultModeFolder(int $defaultModeFolders): self
     {
-        if (!$this->isValidMode($defaultModeFiles)) {
-            throw new InvalidArgumentException('Invalid permission.');
-        }
-
-        $this->defaultModeFiles = $defaultModeFiles;
+        $this->filePermissions->setDefaultModeFolder($defaultModeFolders);
 
         return $this;
     }
 
-    private function isValidMode(int $perm): bool
+    public function setDefaultModeFile(int $defaultModeFiles): self
     {
-        return \in_array(mb_strlen(decoct($perm)), [3, 4], true);
-    }
-
-    public function setDefaultModeFolder(int $defaultModeFolders): self
-    {
-        if (!$this->isValidMode($defaultModeFolders)) {
-            throw new InvalidArgumentException('Invalid permission.');
-        }
-
-        $this->defaultModeFolders = $defaultModeFolders;
+        $this->filePermissions->setDefaultModeFile($defaultModeFiles);
 
         return $this;
     }
@@ -116,13 +83,7 @@ final class FilePermissions implements FilePermsInterface
      */
     public function setAllowedModeFiles(array $allowedModeFiles): self
     {
-        foreach ($allowedModeFiles as $allowedModeFile) {
-            if (!$this->isValidMode($allowedModeFile)) {
-                throw new InvalidArgumentException('Invalid permission.');
-            }
-        }
-
-        $this->allowedModeFiles = $allowedModeFiles;
+        $this->filePermissions->setAllowedModeFiles($allowedModeFiles);
 
         return $this;
     }
@@ -130,40 +91,28 @@ final class FilePermissions implements FilePermsInterface
     /**
      * @param int[] $allowedModeFolders
      */
-    public function setAllowedModeFolders(
-        array $allowedModeFolders
-    ): self {
-        foreach ($allowedModeFolders as $allowedModeFolder) {
-            if (!$this->isValidMode($allowedModeFolder)) {
-                throw new InvalidArgumentException('Invalid permission.');
-            }
-        }
-
-        $this->allowedModeFolders = $allowedModeFolders;
+    public function setAllowedModeFolders(array $allowedModeFolders): self
+    {
+        $this->filePermissions->setAllowedModeFolders($allowedModeFolders);
 
         return $this;
     }
 
     public function scan(): self
     {
-        if ($this->isWindows()) {
+        if (OperativeSystem::isWindows()) {
             return $this;
         }
 
-        foreach ($this->directories as $directory) {
+        $directories = $this->filePermissions->getDirectories();
+
+        foreach ($directories as $directory) {
             if (is_dir($directory)) {
-                $this->checkPerms($this->iterator->filter($directory, $this->exclude));
+                $this->checkPerms($this->iterator->filter($directory, $this->filePermissions->getExclude()));
             }
         }
 
         return $this;
-    }
-
-    private function isWindows(): bool
-    {
-        return 'WIN' === mb_strtoupper(
-            mb_substr(\PHP_OS, 0, 3)
-        );
     }
 
     private function checkPerms(RecursiveIteratorIterator $paths): void
@@ -172,16 +121,16 @@ final class FilePermissions implements FilePermsInterface
             $currentMode = $path->getPerms() & 0777;
 
             if ($path->isDir()) {
-                if (\in_array($currentMode, $this->allowedModeFolders, true)) {
+                if (\in_array($currentMode, $this->filePermissions->getAllowedModeFolders(), true)) {
                     continue;
                 }
             } else {
-                if (\in_array($currentMode, $this->allowedModeFiles, true)) {
+                if (\in_array($currentMode, $this->filePermissions->getAllowedModeFiles(), true)) {
                     continue;
                 }
             }
 
-            $this->disallowedModePaths[] = $path->getRealPath();
+            $this->filePermissions->addDisallowedModePaths($path->getRealPath());
         }
     }
 }

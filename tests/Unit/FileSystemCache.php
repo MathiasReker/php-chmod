@@ -14,29 +14,27 @@ final class FileSystemCache
 {
     private string $directory;
 
-    private int $folderPerm;
+    private int $directoryPermission;
 
-    public function __construct(string $directory, int $perm)
+    public function __construct(string $directory, int $directoryPermission)
     {
         $this->directory = $directory;
 
-        $this->folderPerm = $perm;
+        $this->directoryPermission = $directoryPermission;
     }
 
-    public function store(string $fileName, int $filePerm): void
+    public function store(string $fileName, int $filePermission): void
     {
         if (!is_dir($this->directory)) {
-            mkdir($this->directory, $this->folderPerm, true);
-            chmod($this->directory, $this->folderPerm); // this line is needed
             clearstatcache();
+            mkdir($this->directory, $this->directoryPermission, true);
         }
 
         $file = $this->directory . '/' . $fileName;
         if (!file_exists($file)) {
             touch($file);
+            clearstatcache();
+            chmod($file, $filePermission);
         }
-
-        chmod($file, $filePerm);
-        clearstatcache();
     }
 }

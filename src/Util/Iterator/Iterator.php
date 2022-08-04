@@ -8,14 +8,14 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\FilePermissions;
+namespace MathiasReker\Util\Iterator;
 
 use FilesystemIterator;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-final class Iterator implements IteratorInterface
+final class Iterator
 {
     public function filter(string $directory, array $excludes = []): RecursiveIteratorIterator
     {

@@ -27,7 +27,7 @@
   },
   "autoload": {
     "psr-4": {
-      "MathiasReker\\FilePermissions\\": "src/"
+      "MathiasReker\\": "src/"
     }
   },
   "autoload-dev": {

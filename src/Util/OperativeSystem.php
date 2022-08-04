@@ -8,9 +8,14 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\FilePermissions;
+namespace MathiasReker\Util;
 
-interface IteratorInterface
+final class OperativeSystem
 {
-    public function filter(string $directory, array $excludes);
+    public static function isWindows(): bool
+    {
+        return 'WIN' === mb_strtoupper(
+            mb_substr(\PHP_OS, 0, 3)
+        );
+    }
 }

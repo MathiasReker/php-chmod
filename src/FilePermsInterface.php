@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\FilePermissions;
+namespace MathiasReker;
 
 interface FilePermsInterface
 {
@@ -23,4 +23,6 @@ interface FilePermsInterface
     public function setAllowedModeFiles(array $allowedModeFiles);
 
     public function setAllowedModeFolders(array $allowedModeFolders);
+
+    public function setExclude(array $setExclude);
 }

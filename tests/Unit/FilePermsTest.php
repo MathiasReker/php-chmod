@@ -11,8 +11,9 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use FilesystemIterator;
-use InvalidArgumentException;
-use MathiasReker\FilePermissions\FilePermissions;
+use MathiasReker\Exception\InvalidArgumentException;
+use MathiasReker\FilePermissions;
+use MathiasReker\Util\OperativeSystem;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -257,11 +258,12 @@ final class FilePermsTest extends TestCase
 
     public function testExcludedFolders(): void
     {
-        $result = (new FilePermissions([self::ROOT], ['foo']))
+        $result = (new FilePermissions([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
+            ->setExclude(['foo'])
             ->scan()
             ->dryRun();
 
@@ -272,11 +274,12 @@ final class FilePermsTest extends TestCase
 
     public function testExcludedFiles(): void
     {
-        $result = (new FilePermissions([self::ROOT], ['444.php']))
+        $result = (new FilePermissions([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
+            ->setExclude(['444.php'])
             ->scan()
             ->dryRun();
 
@@ -287,7 +290,7 @@ final class FilePermsTest extends TestCase
 
     protected function setUp(): void
     {
-        if ($this->isWindows()) {
+        if (OperativeSystem::isWindows()) {
             $this->markTestSkipped('All tests in this file are inactive for this operation system.');
         }
 
@@ -297,13 +300,6 @@ final class FilePermsTest extends TestCase
                     ->store((string) $file, $filePerm);
             }
         }
-    }
-
-    private function isWindows(): bool
-    {
-        return 'WIN' === mb_strtoupper(
-            mb_substr(\PHP_OS, 0, 3)
-        );
     }
 
     protected function tearDown(): void
