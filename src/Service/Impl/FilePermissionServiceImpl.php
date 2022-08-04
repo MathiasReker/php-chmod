@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\Service\impl;
+namespace MathiasReker\Service\Impl;
 
 use MathiasReker\Model\FilePermission;
 use MathiasReker\Service\FilePermissionService;
@@ -20,21 +20,21 @@ class FilePermissionServiceImpl implements FilePermissionService
 {
     private Iterator $iterator;
 
-    private FilePermission $filePermissions;
+    private FilePermission $filePermission;
 
     /**
      * @param string[] $directories
      */
     public function __construct(array $directories)
     {
-        $this->filePermissions = new FilePermission($directories);
+        $this->filePermission = new FilePermission($directories);
 
         $this->iterator = new Iterator();
     }
 
     public function setExclude($setExclude): self
     {
-        $this->filePermissions->setExclude($setExclude);
+        $this->filePermission->setExclude($setExclude);
 
         return $this;
     }
@@ -44,12 +44,12 @@ class FilePermissionServiceImpl implements FilePermissionService
      */
     public function dryRun(): array
     {
-        return $this->filePermissions->getDisallowedModePaths();
+        return $this->filePermission->getDisallowedModePaths();
     }
 
     public function fix(): void
     {
-        $disallowedModePaths = $this->filePermissions->getDisallowedModePaths();
+        $disallowedModePaths = $this->filePermission->getDisallowedModePaths();
 
         if (empty($disallowedModePaths)) {
             return;
@@ -60,22 +60,22 @@ class FilePermissionServiceImpl implements FilePermissionService
             chmod(
                 $disallowedModePath,
                 is_dir($disallowedModePath)
-                    ? $this->filePermissions->getDefaultModeFolders()
-                    : $this->filePermissions->getDefaultModeFiles()
+                    ? $this->filePermission->getDefaultModeFolders()
+                    : $this->filePermission->getDefaultModeFiles()
             );
         }
     }
 
     public function setDefaultModeFolder(int $defaultModeFolders): self
     {
-        $this->filePermissions->setDefaultModeFolder($defaultModeFolders);
+        $this->filePermission->setDefaultModeFolder($defaultModeFolders);
 
         return $this;
     }
 
     public function setDefaultModeFile(int $defaultModeFiles): self
     {
-        $this->filePermissions->setDefaultModeFile($defaultModeFiles);
+        $this->filePermission->setDefaultModeFile($defaultModeFiles);
 
         return $this;
     }
@@ -85,7 +85,7 @@ class FilePermissionServiceImpl implements FilePermissionService
      */
     public function setAllowedModeFiles(array $allowedModeFiles): self
     {
-        $this->filePermissions->setAllowedModeFiles($allowedModeFiles);
+        $this->filePermission->setAllowedModeFiles($allowedModeFiles);
 
         return $this;
     }
@@ -96,7 +96,7 @@ class FilePermissionServiceImpl implements FilePermissionService
     public function setAllowedModeFolders(
         array $allowedModeFolders
     ): self {
-        $this->filePermissions->setAllowedModeFolders($allowedModeFolders);
+        $this->filePermission->setAllowedModeFolders($allowedModeFolders);
 
         return $this;
     }
@@ -107,11 +107,11 @@ class FilePermissionServiceImpl implements FilePermissionService
             return $this;
         }
 
-        $directories = $this->filePermissions->getDirectories();
+        $directories = $this->filePermission->getDirectories();
 
         foreach ($directories as $directory) {
             if (is_dir($directory)) {
-                $this->checkPerms($this->iterator->filter($directory, $this->filePermissions->getExclude()));
+                $this->checkPerms($this->iterator->filter($directory, $this->filePermission->getExclude()));
             }
         }
 
@@ -126,22 +126,22 @@ class FilePermissionServiceImpl implements FilePermissionService
             $currentMode = $path->getPerms() & 0777;
 
             if ($path->isDir()) {
-                if (\in_array($currentMode, $this->filePermissions->getAllowedModeFolders(), true)) {
+                if (\in_array($currentMode, $this->filePermission->getAllowedModeFolders(), true)) {
                     continue;
                 }
-            } elseif (\in_array($currentMode, $this->filePermissions->getAllowedModeFiles(), true)) {
+            } elseif (\in_array($currentMode, $this->filePermission->getAllowedModeFiles(), true)) {
                 continue;
             }
 
             $result[] = $path->getRealPath();
         }
 
-        $this->filePermissions->addConcernedPaths($result);
+        $this->filePermission->addConcernedPaths($result);
     }
 
     public function setConcernedPaths(array $concernedPaths): self
     {
-        $this->filePermissions->addConcernedPaths($concernedPaths);
+        $this->filePermission->addConcernedPaths($concernedPaths);
 
         return $this;
     }

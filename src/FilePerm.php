@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace MathiasReker;
 
-use MathiasReker\Service\impl\FilePermissionServiceImpl;
+use MathiasReker\Service\Impl\FilePermissionServiceImpl;
 
 final class FilePerm extends FilePermissionServiceImpl
 {
