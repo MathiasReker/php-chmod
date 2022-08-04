@@ -25,4 +25,6 @@ interface FilePermissionService
     public function setAllowedModeFolders(array $allowedModeFolders);
 
     public function setExclude(array $setExclude);
+
+    public function setConcernedPaths(array $concernedPaths);
 }

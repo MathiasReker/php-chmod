@@ -132,7 +132,14 @@ class FilePermissionServiceImpl implements FilePermissionService
                 continue;
             }
 
-            $this->filePermissions->addDisallowedModePaths($path->getRealPath());
+            $this->filePermissions->addConcernedPaths($path->getRealPath());
         }
+    }
+
+    public function setConcernedPaths(array $concernedPaths): self
+    {
+        $this->filePermissions->addConcernedPaths($concernedPaths);
+
+        return $this;
     }
 }

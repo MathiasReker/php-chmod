@@ -31,7 +31,7 @@ final class FilePermission
     /**
      * @var string[]
      */
-    private array $disallowedModePaths = [];
+    private array $concernedPaths = [];
 
     /**
      * @var string[]
@@ -135,12 +135,15 @@ final class FilePermission
      */
     public function getDisallowedModePaths(): array
     {
-        return $this->disallowedModePaths;
+        return $this->concernedPaths;
     }
 
-    public function addDisallowedModePaths($disallowedModePaths): self
+    /**
+     * @param string[] $concernedPaths
+     */
+    public function addConcernedPaths(array $concernedPaths): self
     {
-        $this->disallowedModePaths[] = $disallowedModePaths;
+        $this->concernedPaths[] = $concernedPaths;
 
         return $this;
     }

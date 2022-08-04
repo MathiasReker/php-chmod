@@ -49,6 +49,7 @@ final class FilePermissionServiceImplTest extends TestCase
         'bar' => 0750,
         'baz' => 0777,
     ];
+
     /**
      * @var string
      */
@@ -288,6 +289,22 @@ final class FilePermissionServiceImplTest extends TestCase
 
         self::assertTrue(
             !\in_array('444.php', $result, true)
+        );
+    }
+
+    public function testConcernedPaths(): void
+    {
+        $result = (new FilePerm([self::ROOT]))
+            ->setDefaultModeFile(0644)
+            ->setDefaultModeFolder(0755)
+            ->setAllowedModeFiles([])
+            ->setAllowedModeFolders([])
+            ->setConcernedPaths([__DIR__ . '/tmp/foo'])
+            ->dryRun();
+
+        self::assertSame(
+            [__DIR__ . '/tmp/foo'],
+            $result
         );
     }
 
