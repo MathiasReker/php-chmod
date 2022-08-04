@@ -44,22 +44,22 @@ class FilePermissionServiceImpl implements FilePermissionService
      */
     public function dryRun(): array
     {
-        return $this->filePermission->getDisallowedModePaths();
+        return $this->filePermission->getConcernedPaths();
     }
 
     public function fix(): void
     {
-        $disallowedModePaths = $this->filePermission->getDisallowedModePaths();
+        $concernedPaths = $this->filePermission->getConcernedPaths();
 
-        if (empty($disallowedModePaths)) {
+        if (empty($concernedPaths)) {
             return;
         }
 
-        foreach ($disallowedModePaths as $disallowedModePath) {
+        foreach ($concernedPaths as $concernedPath) {
             clearstatcache();
             chmod(
-                $disallowedModePath,
-                is_dir($disallowedModePath)
+                $concernedPath,
+                is_dir($concernedPath)
                     ? $this->filePermission->getDefaultModeFolders()
                     : $this->filePermission->getDefaultModeFiles()
             );

@@ -133,7 +133,7 @@ final class FilePermission
     /**
      * @return string[]
      */
-    public function getDisallowedModePaths(): array
+    public function getConcernedPaths(): array
     {
         return $this->concernedPaths;
     }
