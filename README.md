@@ -9,8 +9,7 @@
 [![Issues](https://img.shields.io/github/issues/MathiasReker/php-file-permissions.svg)](https://github.com/MathiasReker/php-file-permissions/issues)
 [![MIT License](https://img.shields.io/github/license/MathiasReker/php-file-permissions.svg)](https://github.com/MathiasReker/php-file-permissions/blob/develop/LICENSE.txt)
 
-`PHP File Permissions` is a PHP library for extended work with file permissions. You can easily change the permissions
-recursively.
+`PHP File Permissions` is a PHP library for easily changing the permissions recursively.
 
 ### Versions & Dependencies
 
