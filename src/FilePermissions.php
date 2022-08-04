@@ -141,6 +141,10 @@ final class FilePermissions implements FilePermsInterface
 
     public function scan(): self
     {
+        if ($this->isWindows()) {
+            return $this;
+        }
+
         foreach ($this->directories as $directory) {
             if (is_dir($directory)) {
                 $this->checkPerms($this->iterator->filter($directory, $this->exclude));
@@ -152,10 +156,6 @@ final class FilePermissions implements FilePermsInterface
 
     private function checkPerms(RecursiveIteratorIterator $paths): void
     {
-        if ($this->isWindows()) {
-            return;
-        }
-
         foreach ($paths as $path) {
             $currentMode = $path->getPerms() & 0777;
 
