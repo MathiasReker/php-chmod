@@ -41,7 +41,7 @@ final class FilePermissionsData
     /**
      * @var string[]
      */
-    private array $exclude;
+    private array $exclude = [];
 
     /**
      * @param string[] $directories
