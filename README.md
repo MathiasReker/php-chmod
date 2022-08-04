@@ -130,3 +130,18 @@ $result->fix();
 ```php
 $result->exclude(['.docker']);
 ```
+
+### Roadmap
+
+See the [open issues](https://github.com/MathiasReker/php-file-permissions/issues) for a complete list of proposed
+features (and known
+issues).
+
+### Contributing
+
+If you have a suggestion to improve this, please fork the repo and create a pull request. You can also open an issue
+with the tag "enhancement". Finally, don't forget to give the project a star! Thanks again!
+
+### License
+
+It is distributed under the MIT License. See `LICENSE` for more information.
