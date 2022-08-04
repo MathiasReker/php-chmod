@@ -30,6 +30,7 @@ $config
         'header_comment' => ['header' => $header, 'comment_type' => 'PHPDoc', 'location' => 'after_open', 'separate' => 'bottom'],
         'use_arrow_functions' => true,
     ])
-    ->setFinder($finder);
+    ->setFinder($finder)
+    ->setLineEnding(PHP_EOL);
 
 return $config;
