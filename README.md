@@ -1,8 +1,5 @@
 <h1 align="center">Php File Permissions</h1>
 
-`PHP File Permissions` is a PHP library for extended work with file permissions. You can easily change the permissions
-recursively.
-
 [![Packagist Version](https://img.shields.io/packagist/v/MathiasReker/php-file-permissions.svg)](https://packagist.org/packages/MathiasReker/php-file-permissions)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/MathiasReker/php-file-permissions.svg?color=%23ff007f)](https://packagist.org/packages/MathiasReker/php-file-permissions)
 [![CI status](https://github.com/MathiasReker/php-file-permissions/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/MathiasReker/php-file-permissions/actions/workflows/ci.yml)
@@ -11,6 +8,9 @@ recursively.
 [![Stargazers](https://img.shields.io/github/stars/MathiasReker/php-file-permissions.svg)](https://github.com/MathiasReker/php-file-permissions/stargazers)
 [![Issues](https://img.shields.io/github/issues/MathiasReker/php-file-permissions.svg)](https://github.com/MathiasReker/php-file-permissions/issues)
 [![MIT License](https://img.shields.io/github/license/MathiasReker/php-file-permissions.svg)](https://github.com/MathiasReker/php-file-permissions/blob/develop/LICENSE.txt)
+
+`PHP File Permissions` is a PHP library for extended work with file permissions. You can easily change the permissions
+recursively.
 
 ### Versions & Dependencies
 
@@ -25,7 +25,7 @@ recursively.
 
 ### Installation
 
-run `composer require MathiasReker/php-file-permissions`
+Run `composer require MathiasReker/php-file-permissions`
 
 ### Examples
 
