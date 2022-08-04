@@ -25,7 +25,7 @@ use RecursiveIteratorIterator;
  *
  * @small
  */
-final class FilePermsTest extends TestCase
+final class FilePermissionsTest extends TestCase
 {
     private const FILE_PERMS = [
         '400.php' => 0400,

@@ -28,6 +28,7 @@ final class FileSystemCache
         if (!is_dir($this->directory)) {
             clearstatcache();
             mkdir($this->directory, $this->directoryPermission, true);
+            chmod($this->directory, $this->directoryPermission); // this line is needed
         }
 
         $file = $this->directory . '/' . $fileName;
