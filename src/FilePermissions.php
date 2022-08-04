@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace MathiasReker;
 
+use MathiasReker\Model\FilePermissionsData;
 use MathiasReker\Util\Iterator\Iterator;
 use MathiasReker\Util\OperativeSystem;
 use RecursiveIteratorIterator;
@@ -25,9 +26,9 @@ final class FilePermissions implements FilePermsInterface
      */
     public function __construct(array $directories)
     {
-        $this->iterator = new Iterator();
+        $this->filePermissions = new FilePermissionsData($directories);
 
-        $this->filePermissions = new Model\FilePermissionsData($directories);
+        $this->iterator = new Iterator();
     }
 
     public function setExclude($setExclude): self

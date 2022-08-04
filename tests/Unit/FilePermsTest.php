@@ -259,11 +259,11 @@ final class FilePermsTest extends TestCase
     public function testExcludedFolders(): void
     {
         $result = (new FilePermissions([self::ROOT]))
+            ->setExclude(['foo'])
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->setExclude(['foo'])
             ->scan()
             ->dryRun();
 
@@ -275,11 +275,11 @@ final class FilePermsTest extends TestCase
     public function testExcludedFiles(): void
     {
         $result = (new FilePermissions([self::ROOT]))
+            ->setExclude(['444.php'])
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->setExclude(['444.php'])
             ->scan()
             ->dryRun();
 
