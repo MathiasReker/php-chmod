@@ -95,6 +95,11 @@ final class FilePermissions implements FilePermsInterface
         return $this;
     }
 
+    private function isValidMode(int $perm): bool
+    {
+        return \in_array(mb_strlen(decoct($perm)), [3, 4], true);
+    }
+
     public function setDefaultModeFolder(int $defaultModeFolders): self
     {
         if (!$this->isValidMode($defaultModeFolders)) {
@@ -154,6 +159,13 @@ final class FilePermissions implements FilePermsInterface
         return $this;
     }
 
+    private function isWindows(): bool
+    {
+        return 'WIN' === mb_strtoupper(
+            mb_substr(\PHP_OS, 0, 3)
+        );
+    }
+
     private function checkPerms(RecursiveIteratorIterator $paths): void
     {
         foreach ($paths as $path) {
@@ -171,17 +183,5 @@ final class FilePermissions implements FilePermsInterface
 
             $this->disallowedModePaths[] = $path->getRealPath();
         }
-    }
-
-    private function isWindows(): bool
-    {
-        return 'WIN' === mb_strtoupper(
-            mb_substr(\PHP_OS, 0, 3)
-        );
-    }
-
-    private function isValidMode(int $perm): bool
-    {
-        return \in_array(mb_strlen(decoct($perm)), [3, 4], true);
     }
 }

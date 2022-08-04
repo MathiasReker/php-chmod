@@ -51,38 +51,6 @@ final class FilePermsTest extends TestCase
      */
     private const ROOT = __DIR__ . '/tmp';
 
-    protected function setUp(): void
-    {
-        if ($this->isWindows()) {
-            $this->markTestSkipped('All tests in this file are inactive for this operation system.');
-        }
-
-        foreach (self::FOLDER_PERMS as $directory => $directoryPerm) {
-            foreach (self::FILE_PERMS as $file => $filePerm) {
-                (new FileSystemCache(self::ROOT . '/' . $directory, $directoryPerm))
-                    ->store((string) $file, $filePerm);
-            }
-        }
-    }
-
-    protected function tearDown(): void
-    {
-        $paths = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(
-                self::ROOT, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST);
-
-        foreach ($paths as $path) {
-            if ($path->isDir()) {
-                rmdir($path->getRealPath());
-            } else {
-                unlink($path->getRealPath());
-            }
-        }
-
-        rmdir(self::ROOT);
-    }
-
     public function testFilePermissionIsNotChangedIfAllowedModeFiles(): void
     {
         (new FilePermissions([self::ROOT]))
@@ -97,6 +65,11 @@ final class FilePermsTest extends TestCase
             0400,
             $this->getPerms(self::ROOT . '/foo/400.php')
         );
+    }
+
+    private function getPerms(string $file): int
+    {
+        return fileperms($file) & 0777;
     }
 
     public function testFilePermissionIsChangedIfNotAllowedModeFiles(): void
@@ -312,6 +285,20 @@ final class FilePermsTest extends TestCase
         );
     }
 
+    protected function setUp(): void
+    {
+        if ($this->isWindows()) {
+            $this->markTestSkipped('All tests in this file are inactive for this operation system.');
+        }
+
+        foreach (self::FOLDER_PERMS as $directory => $directoryPerm) {
+            foreach (self::FILE_PERMS as $file => $filePerm) {
+                (new FileSystemCache(self::ROOT . '/' . $directory, $directoryPerm))
+                    ->store((string) $file, $filePerm);
+            }
+        }
+    }
+
     private function isWindows(): bool
     {
         return 'WIN' === mb_strtoupper(
@@ -319,8 +306,21 @@ final class FilePermsTest extends TestCase
         );
     }
 
-    private function getPerms(string $file): int
+    protected function tearDown(): void
     {
-        return fileperms($file) & 0777;
+        $paths = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
+                self::ROOT, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach ($paths as $path) {
+            if ($path->isDir()) {
+                rmdir($path->getRealPath());
+            } else {
+                unlink($path->getRealPath());
+            }
+        }
+
+        rmdir(self::ROOT);
     }
 }
