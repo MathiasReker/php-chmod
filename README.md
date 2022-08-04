@@ -28,7 +28,7 @@ Run `composer require MathiasReker/php-file-permissions`
 
 ### Examples
 
-#### Dry run:
+Dry run:
 
 ```php
 <?php
@@ -48,7 +48,7 @@ $result = (new FilePerm([__DIR__]))
 var_dump($result); // string[]
 ```
 
-#### Fix:
+Fix:
 
 ```php
 <?php
