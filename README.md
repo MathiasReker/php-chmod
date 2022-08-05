@@ -124,7 +124,7 @@ $result->dryRun();
 $result->fix();
 ```
 
-`exclude` excludes a list of files/folder names (not paths):
+`excludedNames` excludes a list of files/folder names (not paths):
 
 ```php
 $result->excludedNames(['.docker']);
