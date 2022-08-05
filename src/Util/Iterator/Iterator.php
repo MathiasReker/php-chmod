@@ -23,10 +23,7 @@ final class Iterator
 
         return new RecursiveIteratorIterator(
             new RecursiveCallbackFilterIterator(
-                new RecursiveDirectoryIterator(
-                    $directory,
-                    FilesystemIterator::SKIP_DOTS
-                ),
+                new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
                 $filter
             ),
             RecursiveIteratorIterator::SELF_FIRST,

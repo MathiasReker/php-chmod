@@ -14,9 +14,9 @@ use MathiasReker\PhpChmod\Exception\InvalidArgumentException;
 
 final class FilePermission
 {
-    private int $defaultModeFiles = 0644;
+    private ?int $defaultModeFiles = null;
 
-    private int $defaultModeFolders = 0755;
+    private ?int $defaultModeFolders = null;
 
     /**
      * @var int[]
@@ -166,12 +166,12 @@ final class FilePermission
         return $this;
     }
 
-    public function getDefaultModeFiles(): int
+    public function getDefaultModeFiles(): ?int
     {
         return $this->defaultModeFiles;
     }
 
-    public function getDefaultModeFolders(): int
+    public function getDefaultModeFolders(): ?int
     {
         return $this->defaultModeFolders;
     }
