@@ -58,7 +58,7 @@ final class FilePermissionServiceImplTest extends TestCase
     protected function setUp(): void
     {
         if (OperatingSystem::isWindows()) {
-            self::markTestSkipped('All tests in this file are inactive for this operation system.');
+            self::markTestSkipped('Tests in this class are skipped for Windows.');
         }
 
         foreach (self::FOLDER_PERMS as $directory => $directoryPerm) {
