@@ -71,7 +71,7 @@ var_dump($result); // bool
 ### Documentation
 
 ```php
-$result = new FilePerm();
+$result = new Scanner();
 ```
 
 `setDefaultModeFile` sets the default file permission:

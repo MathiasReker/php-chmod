@@ -43,7 +43,7 @@ final class IteratorServiceImpl implements IteratorService
 
     public function getPaths(): RecursiveIteratorIterator
     {
-        $closure = static fn ($path) => !\in_array($path->getFilename(), $this->iterator->getExcludedDirectories(), true);
+        $closure = fn ($path) => !\in_array($path->getFilename(), $this->iterator->getExcludedDirectories(), true);
 
         return new RecursiveIteratorIterator(
             new RecursiveCallbackFilterIterator(
