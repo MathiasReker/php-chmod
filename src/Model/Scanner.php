@@ -12,8 +12,11 @@ namespace MathiasReker\PhpChmod\Model;
 
 use MathiasReker\PhpChmod\Exception\InvalidArgumentException;
 
-final class FilePermission
+final class Scanner
 {
+    /**
+     * @var string
+     */
     private const INVALID_PERMISSION = 'Invalid permission.';
 
     private ?int $defaultModeFiles = null;
@@ -38,20 +41,7 @@ final class FilePermission
     /**
      * @var string[]
      */
-    private array $directories = [];
-
-    /**
-     * @var string[]
-     */
     private array $excludedNames = [];
-
-    /**
-     * @param string[] $directories
-     */
-    public function __construct(array $directories)
-    {
-        $this->directories = $directories;
-    }
 
     public function setDefaultModeFile(int $defaultModeFiles): self
     {
@@ -122,14 +112,6 @@ final class FilePermission
         $this->allowedModeFolders = $allowedModeFolders;
 
         return $this;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getDirectories(): array
-    {
-        return $this->directories;
     }
 
     /**

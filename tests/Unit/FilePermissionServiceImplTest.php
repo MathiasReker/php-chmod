@@ -12,7 +12,7 @@ namespace Tests\Unit;
 
 use FilesystemIterator;
 use MathiasReker\PhpChmod\Exception\InvalidArgumentException;
-use MathiasReker\PhpChmod\FilePerm;
+use MathiasReker\PhpChmod\Scanner;
 use MathiasReker\PhpChmod\Util\OperatingSystem;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
@@ -21,7 +21,7 @@ use RecursiveIteratorIterator;
 /**
  * @internal
  *
- * @covers \FilePermissionServiceImpl
+ * @covers \ScannerServiceImpl
  *
  * @small
  */
@@ -88,12 +88,12 @@ final class FilePermissionServiceImplTest extends TestCase
 
     public function testFilePermissionIsNotChangedIfAllowedModeFiles(): void
     {
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([0400])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
 
         self::assertSame(0400, $this->getPerms(self::ROOT . '/foo/400.php'));
@@ -101,12 +101,12 @@ final class FilePermissionServiceImplTest extends TestCase
 
     public function testFilePermissionIsChangedIfNotAllowedModeFiles(): void
     {
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
 
         self::assertSame(0644, $this->getPerms(self::ROOT . '/foo/400.php'));
@@ -114,12 +114,12 @@ final class FilePermissionServiceImplTest extends TestCase
 
     public function testFolderPermissionIsNotChangedIfAllowedModeFolders(): void
     {
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([0777])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
 
         self::assertSame(0777, $this->getPerms(self::ROOT . '/baz'));
@@ -127,12 +127,12 @@ final class FilePermissionServiceImplTest extends TestCase
 
     public function testFolderPermissionIsChangedIfNotAllowedModeFolders(): void
     {
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
 
         self::assertSame(0755, $this->getPerms(self::ROOT . '/baz'));
@@ -140,12 +140,12 @@ final class FilePermissionServiceImplTest extends TestCase
 
     public function testFilePermissionIsChangedIfDifferentToDefault(): void
     {
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
 
         self::assertSame(0644, $this->getPerms(self::ROOT . '/bar/666.php'));
@@ -155,12 +155,12 @@ final class FilePermissionServiceImplTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(-1)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
     }
 
@@ -168,12 +168,12 @@ final class FilePermissionServiceImplTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(1)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
     }
 
@@ -181,12 +181,12 @@ final class FilePermissionServiceImplTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(-1)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
     }
 
@@ -194,12 +194,12 @@ final class FilePermissionServiceImplTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(1)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
     }
 
@@ -207,12 +207,12 @@ final class FilePermissionServiceImplTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([-1])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
     }
 
@@ -220,12 +220,12 @@ final class FilePermissionServiceImplTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([1])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
     }
 
@@ -233,12 +233,12 @@ final class FilePermissionServiceImplTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([-1])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
     }
 
@@ -246,23 +246,23 @@ final class FilePermissionServiceImplTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        (new FilePerm([self::ROOT]))
+        (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([1])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->fix();
     }
 
     public function testDryRun(): void
     {
-        $result = (new FilePerm([self::ROOT]))
+        $result = (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->dryRun();
 
         self::assertNotSame([], $result);
@@ -270,13 +270,13 @@ final class FilePermissionServiceImplTest extends TestCase
 
     public function testExcludedFolders(): void
     {
-        $result = (new FilePerm([self::ROOT]))
+        $result = (new Scanner())
             ->setExcludeNames(['foo'])
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->dryRun();
 
         self::assertNotTrue(\in_array('foo', $result, true));
@@ -284,13 +284,13 @@ final class FilePermissionServiceImplTest extends TestCase
 
     public function testExcludedFiles(): void
     {
-        $result = (new FilePerm([self::ROOT]))
+        $result = (new Scanner())
             ->setExcludeNames(['444.php'])
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
-            ->scan()
+            ->scan([self::ROOT])
             ->dryRun();
 
         self::assertNotTrue(\in_array('444.php', $result, true));
@@ -298,7 +298,7 @@ final class FilePermissionServiceImplTest extends TestCase
 
     public function testConcernedPaths(): void
     {
-        $result = (new FilePerm([self::ROOT]))
+        $result = (new Scanner())
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -314,9 +314,10 @@ final class FilePermissionServiceImplTest extends TestCase
 
     public function testEmptyFileAndFolderPermissions(): void
     {
-        $result = (new FilePerm([self::ROOT]))
+        $result = (new Scanner())
             ->setAllowedModeFiles([])
             ->setAllowedModeFolders([])
+            ->scan([self::ROOT])
             ->dryRun();
 
         self::assertSame(

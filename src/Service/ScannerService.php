@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace MathiasReker\PhpChmod\Service;
 
-interface FilePermissionService
+interface ScannerService
 {
     public function dryRun();
 

@@ -10,31 +10,23 @@ declare(strict_types=1);
 
 namespace MathiasReker\PhpChmod\Service\Impl;
 
-use MathiasReker\PhpChmod\Model\FilePermission;
-use MathiasReker\PhpChmod\Service\FilePermissionService;
-use MathiasReker\PhpChmod\Util\Iterator\Iterator;
+use MathiasReker\PhpChmod\Model\Scanner;
+use MathiasReker\PhpChmod\Service\ScannerService;
 use MathiasReker\PhpChmod\Util\OperatingSystem;
 use RecursiveIteratorIterator;
 
-class FilePermissionServiceImpl implements FilePermissionService
+class ScannerServiceImpl implements ScannerService
 {
-    private Iterator $iterator;
+    private Scanner $scanner;
 
-    private FilePermission $filePermission;
-
-    /**
-     * @param string[] $directories
-     */
-    public function __construct(array $directories)
+    public function __construct()
     {
-        $this->filePermission = new FilePermission($directories);
-
-        $this->iterator = new Iterator();
+        $this->scanner = new Scanner();
     }
 
     public function setExcludeNames($setExcludedNames): self
     {
-        $this->filePermission->setExcludeNames($setExcludedNames);
+        $this->scanner->setExcludeNames($setExcludedNames);
 
         return $this;
     }
@@ -44,12 +36,12 @@ class FilePermissionServiceImpl implements FilePermissionService
      */
     public function dryRun(): array
     {
-        return $this->filePermission->getConcernedPaths();
+        return $this->scanner->getConcernedPaths();
     }
 
     public function fix(): void
     {
-        $concernedPaths = $this->filePermission->getConcernedPaths();
+        $concernedPaths = $this->scanner->getConcernedPaths();
 
         if (empty($concernedPaths)) {
             return;
@@ -61,22 +53,22 @@ class FilePermissionServiceImpl implements FilePermissionService
             chmod(
                 $concernedPath,
                 is_dir($concernedPath)
-                    ? $this->filePermission->getDefaultModeFolders()
-                    : $this->filePermission->getDefaultModeFiles()
+                    ? $this->scanner->getDefaultModeFolders()
+                    : $this->scanner->getDefaultModeFiles()
             );
         }
     }
 
     public function setDefaultModeFolder(int $defaultModeFolders): self
     {
-        $this->filePermission->setDefaultModeFolder($defaultModeFolders);
+        $this->scanner->setDefaultModeFolder($defaultModeFolders);
 
         return $this;
     }
 
     public function setDefaultModeFile(int $defaultModeFiles): self
     {
-        $this->filePermission->setDefaultModeFile($defaultModeFiles);
+        $this->scanner->setDefaultModeFile($defaultModeFiles);
 
         return $this;
     }
@@ -86,7 +78,7 @@ class FilePermissionServiceImpl implements FilePermissionService
      */
     public function setAllowedModeFiles(array $allowedModeFiles): self
     {
-        $this->filePermission->setAllowedModeFiles($allowedModeFiles);
+        $this->scanner->setAllowedModeFiles($allowedModeFiles);
 
         return $this;
     }
@@ -97,22 +89,25 @@ class FilePermissionServiceImpl implements FilePermissionService
     public function setAllowedModeFolders(
         array $allowedModeFolders
     ): self {
-        $this->filePermission->setAllowedModeFolders($allowedModeFolders);
+        $this->scanner->setAllowedModeFolders($allowedModeFolders);
 
         return $this;
     }
 
-    public function scan(): self
+    public function scan(array $directories): self
     {
         if (OperatingSystem::isWindows()) {
             return $this;
         }
 
-        $directories = $this->filePermission->getDirectories();
-
         foreach ($directories as $directory) {
             if (is_dir($directory)) {
-                $this->checkPerms($this->iterator->filter($directory, $this->filePermission->getExcludedNames()));
+                $paths = (new IteratorServiceImpl())
+                    ->setDirectory($directory)
+                    ->setExcludedNames($this->scanner->getExcludedNames())
+                    ->getPaths();
+
+                $this->checkPerms($paths);
             }
         }
 
@@ -121,7 +116,7 @@ class FilePermissionServiceImpl implements FilePermissionService
 
     public function setConcernedPaths(array $concernedPaths): self
     {
-        $this->filePermission->addConcernedPaths($concernedPaths);
+        $this->scanner->addConcernedPaths($concernedPaths);
 
         return $this;
     }
@@ -134,19 +129,19 @@ class FilePermissionServiceImpl implements FilePermissionService
             $currentMode = $path->getPerms() & 0777;
 
             if ($path->isDir()) {
-                if (null === $this->filePermission->getDefaultModeFolders()) {
+                if (null === $this->scanner->getDefaultModeFolders()) {
                     continue;
                 }
 
-                if (\in_array($currentMode, $this->filePermission->getAllowedModeFolders(), true)) {
+                if (\in_array($currentMode, $this->scanner->getAllowedModeFolders(), true)) {
                     continue;
                 }
             } else {
-                if (null === $this->filePermission->getDefaultModeFiles()) {
+                if (null === $this->scanner->getDefaultModeFiles()) {
                     continue;
                 }
 
-                if (\in_array($currentMode, $this->filePermission->getAllowedModeFiles(), true)) {
+                if (\in_array($currentMode, $this->scanner->getAllowedModeFiles(), true)) {
                     continue;
                 }
             }
@@ -154,6 +149,6 @@ class FilePermissionServiceImpl implements FilePermissionService
             $result[] = $path->getRealPath();
         }
 
-        $this->filePermission->addConcernedPaths($result);
+        $this->scanner->addConcernedPaths($result);
     }
 }

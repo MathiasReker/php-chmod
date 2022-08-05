@@ -8,10 +8,13 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\PhpChmod;
+namespace MathiasReker\PhpChmod\Service;
 
-use MathiasReker\PhpChmod\Service\Impl\FilePermissionServiceImpl;
-
-final class FilePerm extends FilePermissionServiceImpl
+interface IteratorService
 {
+    public function setExcludedNames(array $excludedDirectories);
+
+    public function setDirectory(string $directory);
+
+    public function getPaths();
 }

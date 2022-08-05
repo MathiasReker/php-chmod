@@ -33,16 +33,16 @@ Dry run:
 ```php
 <?php
 
-use MathiasReker\PhpChmod\FilePerm;
+use MathiasReker\PhpChmod\Scanner;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$result = (new FilePerm([__DIR__]))
+$result = (new Scanner())
     ->setDefaultModeFile(0644)
     ->setDefaultModeFolder(0755)
     ->setAllowedModeFiles([0400, 0444, 0640])
     ->setAllowedModeFolders([0750])
-    ->scan()
+    ->scan([__DIR__])
     ->dryRun();
 
 var_dump($result); // string[]
@@ -53,16 +53,16 @@ Fix:
 ```php
 <?php
 
-use MathiasReker\PhpChmod\FilePerm;
+use MathiasReker\PhpChmod\Scanner;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$result = (new FilePerm([__DIR__]))
+$result = (new Scanner())
     ->setDefaultModeFile(0644)
     ->setDefaultModeFolder(0755)
     ->setAllowedModeFiles([0400, 0444, 0640])
     ->setAllowedModeFolders([0750])
-    ->scan()
+    ->scan([__DIR__])
     ->fix();
 
 var_dump($result); // bool
@@ -70,10 +70,8 @@ var_dump($result); // bool
 
 ### Documentation
 
-The constructor takes an array of directories to scan:
-
 ```php
-$result = new FilePerm([__DIR__]);
+$result = new FilePerm();
 ```
 
 `setDefaultModeFile` sets the default file permission:
@@ -100,10 +98,16 @@ $result->setAllowedModeFiles([0400, 0444, 0640]);
 $result->setAllowedModeFolders([0750]);
 ```
 
+`excludedNames` excludes a list of files/folder names (not paths):
+
+```php
+$result->excludedNames(['.docker']);
+```
+
 `scan` finds all the concerned files/folders:
 
 ```php
-$result->scan();
+$result->scan([__DIR__]);
 ```
 
 `setConcernedPaths` sets concerned files manually. This is useful if you want to use a custom scanner:
@@ -122,12 +126,6 @@ $result->dryRun();
 
 ```php
 $result->fix();
-```
-
-`excludedNames` excludes a list of files/folder names (not paths):
-
-```php
-$result->excludedNames(['.docker']);
 ```
 
 ### Roadmap
