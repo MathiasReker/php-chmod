@@ -20,11 +20,11 @@ interface ScannerService
 
     public function setDefaultDirectoryMode(int $defaultDirectoryMode);
 
-    public function setAllowedFileModes(array $allowedFileModes);
+    public function setExcludedFileModes(array $excludedFileModes);
 
-    public function setAllowedDirectoryModes(array $allowedDirectoryModes);
+    public function setExcludedDirectoryModes(array $excludedDirectoryModes);
 
     public function setExcludeNames(array $setExcludedNames);
 
-    public function setConcernedPaths(array $concernedPaths);
+    public function addConcernedPaths(array $concernedPaths);
 }

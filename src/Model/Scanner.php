@@ -26,12 +26,12 @@ final class Scanner
     /**
      * @var int[]
      */
-    private array $allowedFileModes = [];
+    private array $excludedFileModes = [];
 
     /**
      * @var int[]
      */
-    private array $allowedDirectoryModes = [];
+    private array $excludedDirectoryModes = [];
 
     /**
      * @var string[]
@@ -68,23 +68,23 @@ final class Scanner
     /**
      * @return int[]
      */
-    public function getAllowedFileModes(): array
+    public function getExcludedFileModes(): array
     {
-        return $this->allowedFileModes;
+        return $this->excludedFileModes;
     }
 
     /**
-     * @param int[] $allowedFileModes
+     * @param int[] $excludedFileModes
      */
-    public function setAllowedFileModes(array $allowedFileModes): self
+    public function setExcludedFileModes(array $excludedFileModes): self
     {
-        foreach ($allowedFileModes as $allowedModeFile) {
-            if (!$this->isValidMode($allowedModeFile)) {
+        foreach ($excludedFileModes as $excludedModeFile) {
+            if (!$this->isValidMode($excludedModeFile)) {
                 throw new InvalidArgumentException(self::INVALID_PERMISSION);
             }
         }
 
-        $this->allowedFileModes = $allowedFileModes;
+        $this->excludedFileModes = $excludedFileModes;
 
         return $this;
     }
@@ -92,24 +92,24 @@ final class Scanner
     /**
      * @return int[]
      */
-    public function getAllowedDirectoryModes(): array
+    public function getExcludedDirectoryModes(): array
     {
-        return $this->allowedDirectoryModes;
+        return $this->excludedDirectoryModes;
     }
 
     /**
-     * @param int[] $allowedDirectoryModes
+     * @param int[] $excludedDirectoryModes
      */
-    public function setAllowedDirectoryModes(
-        array $allowedDirectoryModes
+    public function setExcludedDirectoryModes(
+        array $excludedDirectoryModes
     ): self {
-        foreach ($allowedDirectoryModes as $allowedDirectoryMode) {
-            if (!$this->isValidMode($allowedDirectoryMode)) {
+        foreach ($excludedDirectoryModes as $excludedDirectoryMode) {
+            if (!$this->isValidMode($excludedDirectoryMode)) {
                 throw new InvalidArgumentException(self::INVALID_PERMISSION);
             }
         }
 
-        $this->allowedDirectoryModes = $allowedDirectoryModes;
+        $this->excludedDirectoryModes = $excludedDirectoryModes;
 
         return $this;
     }

@@ -40,8 +40,8 @@ require __DIR__ . '/vendor/autoload.php';
 $result = (new Scanner())
     ->setDefaultFileMode(0644)
     ->setDefaultDirectoryMode(0755)
-    ->setAllowedFileModes([0400, 0444, 0640])
-    ->setAllowedDirectoryModes([0750])
+    ->setExcludedFileModes([0400, 0444, 0640])
+    ->setExcludedDirectoryModes([0750])
     ->scan([__DIR__])
     ->dryRun();
 
@@ -60,8 +60,8 @@ require __DIR__ . '/vendor/autoload.php';
 $result = (new Scanner())
     ->setDefaultFileMode(0644)
     ->setDefaultDirectoryMode(0755)
-    ->setAllowedFileModes([0400, 0444, 0640])
-    ->setAllowedDirectoryModes([0750])
+    ->setExcludedFileModes([0400, 0444, 0640])
+    ->setExcludedDirectoryModes([0750])
     ->scan([__DIR__])
     ->fix();
 

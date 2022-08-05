@@ -25,12 +25,12 @@ use RecursiveIteratorIterator;
  *
  * @small
  */
-final class FilePermissionServiceImplTest extends TestCase
+final class ScannerServiceImplTest extends TestCase
 {
     /**
      * @var array<string, int>
      */
-    private const FILE_PERMS = [
+    private const FILE_MODES = [
         '400.php' => 0400,
         '444.php' => 0444,
         '640.php' => 0640,
@@ -44,7 +44,7 @@ final class FilePermissionServiceImplTest extends TestCase
     /**
      * @var array<string, int>
      */
-    private const FOLDER_PERMS = [
+    private const DIRECTORY_MODES = [
         'foo' => 0700,
         'bar' => 0750,
         'baz' => 0777,
@@ -61,10 +61,10 @@ final class FilePermissionServiceImplTest extends TestCase
             self::markTestSkipped('Tests in this class are skipped for Windows.');
         }
 
-        foreach (self::FOLDER_PERMS as $directory => $directoryPerm) {
-            foreach (self::FILE_PERMS as $file => $filePerm) {
-                (new FileSystemCache(self::ROOT . '/' . $directory, $directoryPerm))
-                    ->store($file, $filePerm);
+        foreach (self::DIRECTORY_MODES as $directory => $directoryMode) {
+            foreach (self::FILE_MODES as $file => $fileMode) {
+                (new FileSystemCache(self::ROOT . '/' . $directory, $directoryMode))
+                    ->store($file, $fileMode);
             }
         }
     }
@@ -86,171 +86,171 @@ final class FilePermissionServiceImplTest extends TestCase
         rmdir(self::ROOT);
     }
 
-    public function testFilePermissionIsNotChangedIfAllowedModeFiles(): void
+    public function testFileModeIsNotChangedIfExcludedFileModes(): void
     {
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([0400])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([0400])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
-        self::assertSame(0400, $this->getPerms(self::ROOT . '/foo/400.php'));
+        self::assertSame(0400, $this->getMode(self::ROOT . '/foo/400.php'));
     }
 
-    public function testFilePermissionIsChangedIfNotAllowedModeFiles(): void
+    public function testFileModeIsChangedIfNotExcludedFileModes(): void
     {
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
-        self::assertSame(0644, $this->getPerms(self::ROOT . '/foo/400.php'));
+        self::assertSame(0644, $this->getMode(self::ROOT . '/foo/400.php'));
     }
 
-    public function testFolderPermissionIsNotChangedIfAllowedModeFolders(): void
+    public function testDirectoryModeIsNotChangedIfExcludedDirectoryModes(): void
     {
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([0777])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([0777])
             ->scan([self::ROOT])
             ->fix();
 
-        self::assertSame(0777, $this->getPerms(self::ROOT . '/baz'));
+        self::assertSame(0777, $this->getMode(self::ROOT . '/baz'));
     }
 
-    public function testFolderPermissionIsChangedIfNotAllowedModeFolders(): void
+    public function testDirectoryModeIsChangedIfNotExcludedDirectoryModes(): void
     {
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
-        self::assertSame(0755, $this->getPerms(self::ROOT . '/baz'));
+        self::assertSame(0755, $this->getMode(self::ROOT . '/baz'));
     }
 
-    public function testFilePermissionIsChangedIfDifferentToDefault(): void
+    public function testFileModeIsChangedIfDifferentToDefault(): void
     {
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
-        self::assertSame(0644, $this->getPerms(self::ROOT . '/bar/666.php'));
+        self::assertSame(0644, $this->getMode(self::ROOT . '/bar/666.php'));
     }
 
-    public function testDefaultFilePermissionIsNotValid(): void
+    public function testDefaultFileModeIsNotValid(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
             ->setDefaultFileMode(-1)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
 
-    public function testDefaultFilePermissionIsNotValid2(): void
+    public function testDefaultFileModeIsNotValid2(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
             ->setDefaultFileMode(1)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
 
-    public function testDefaultFolderPermissionIsNotValid(): void
+    public function testDefaultDirectoryModeIsNotValid(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(-1)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
 
-    public function testDefaultFolderPermissionIsNotValid2(): void
+    public function testDefaultDirectoryModeIsNotValid2(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(1)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
 
-    public function testAllowedFilePermissionIsNotValid(): void
+    public function testExcludedFileModeIsNotValid(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([-1])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([-1])
             ->scan([self::ROOT])
             ->fix();
     }
 
-    public function testAllowedFilePermissionIsNotValid2(): void
+    public function testExcludedFileModeIsNotValid2(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([1])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([1])
             ->scan([self::ROOT])
             ->fix();
     }
 
-    public function testAllowedFolderPermissionIsNotValid(): void
+    public function testExcludedDirectoryModeIsNotValid(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([-1])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([-1])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
 
-    public function testAllowedFolderPermissionIsNotValid2(): void
+    public function testExcludedDirectoryModeIsNotValid2(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([1])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([1])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
@@ -260,22 +260,22 @@ final class FilePermissionServiceImplTest extends TestCase
         $result = (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->dryRun();
 
         self::assertNotSame([], $result);
     }
 
-    public function testExcludedFolders(): void
+    public function testExcludedDirectories(): void
     {
         $result = (new Scanner())
             ->setExcludeNames(['foo'])
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->dryRun();
 
@@ -288,8 +288,8 @@ final class FilePermissionServiceImplTest extends TestCase
             ->setExcludeNames(['444.php'])
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->dryRun();
 
@@ -301,9 +301,9 @@ final class FilePermissionServiceImplTest extends TestCase
         $result = (new Scanner())
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
-            ->setConcernedPaths([__DIR__ . '/tmp/foo'])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
+            ->addConcernedPaths([__DIR__ . '/tmp/foo'])
             ->dryRun();
 
         self::assertSame(
@@ -312,11 +312,11 @@ final class FilePermissionServiceImplTest extends TestCase
         );
     }
 
-    public function testEmptyFileAndFolderPermissions(): void
+    public function testEmptyFileAndDirectoryModes(): void
     {
         $result = (new Scanner())
-            ->setAllowedFileModes([])
-            ->setAllowedDirectoryModes([])
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->dryRun();
 
@@ -326,7 +326,7 @@ final class FilePermissionServiceImplTest extends TestCase
         );
     }
 
-    private function getPerms(string $file): int
+    private function getMode(string $file): int
     {
         return fileperms($file) & 0777;
     }

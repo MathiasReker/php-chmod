@@ -74,22 +74,22 @@ class ScannerServiceImpl implements ScannerService
     }
 
     /**
-     * @param int[] $allowedFileModes
+     * @param int[] $excludedFileModes
      */
-    public function setAllowedFileModes(array $allowedFileModes): self
+    public function setExcludedFileModes(array $excludedFileModes): self
     {
-        $this->scanner->setAllowedFileModes($allowedFileModes);
+        $this->scanner->setExcludedFileModes($excludedFileModes);
 
         return $this;
     }
 
     /**
-     * @param int[] $allowedDirectoryModes
+     * @param int[] $excludedDirectoryModes
      */
-    public function setAllowedDirectoryModes(
-        array $allowedDirectoryModes
+    public function setExcludedDirectoryModes(
+        array $excludedDirectoryModes
     ): self {
-        $this->scanner->setAllowedDirectoryModes($allowedDirectoryModes);
+        $this->scanner->setExcludedDirectoryModes($excludedDirectoryModes);
 
         return $this;
     }
@@ -107,21 +107,21 @@ class ScannerServiceImpl implements ScannerService
                     ->setExcludedNames($this->scanner->getExcludedNames())
                     ->getPaths();
 
-                $this->addConcernedPaths($paths);
+                $this->checkMode($paths);
             }
         }
 
         return $this;
     }
 
-    public function setConcernedPaths(array $concernedPaths): self
+    public function addConcernedPaths(array $concernedPaths): self
     {
         $this->scanner->addConcernedPaths($concernedPaths);
 
         return $this;
     }
 
-    private function addConcernedPaths(RecursiveIteratorIterator $paths): void
+    private function checkMode(RecursiveIteratorIterator $paths): void
     {
         $result = [];
 
@@ -133,7 +133,7 @@ class ScannerServiceImpl implements ScannerService
                     continue;
                 }
 
-                if (\in_array($currentMode, $this->scanner->getAllowedDirectoryModes(), true)) {
+                if (\in_array($currentMode, $this->scanner->getExcludedDirectoryModes(), true)) {
                     continue;
                 }
             } else {
@@ -141,7 +141,7 @@ class ScannerServiceImpl implements ScannerService
                     continue;
                 }
 
-                if (\in_array($currentMode, $this->scanner->getAllowedFileModes(), true)) {
+                if (\in_array($currentMode, $this->scanner->getExcludedFileModes(), true)) {
                     continue;
                 }
             }
