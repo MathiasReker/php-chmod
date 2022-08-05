@@ -58,7 +58,7 @@ final class ScannerServiceImplTest extends TestCase
     protected function setUp(): void
     {
         if (OperatingSystem::isWindows()) {
-         //   self::markTestSkipped('Tests in this class are skipped for Windows.');
+            self::markTestSkipped('Tests in this class are skipped for Windows.');
         }
 
         foreach (self::DIRECTORY_MODES as $directory => $directoryMode) {
