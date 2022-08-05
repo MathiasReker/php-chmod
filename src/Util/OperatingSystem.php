@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace MathiasReker\PhpChmod\Util;
 
-final class OperativeSystem
+final class OperatingSystem
 {
     public static function isWindows(): bool
     {

@@ -13,7 +13,7 @@ namespace MathiasReker\PhpChmod\Service\Impl;
 use MathiasReker\PhpChmod\Model\FilePermission;
 use MathiasReker\PhpChmod\Service\FilePermissionService;
 use MathiasReker\PhpChmod\Util\Iterator\Iterator;
-use MathiasReker\PhpChmod\Util\OperativeSystem;
+use MathiasReker\PhpChmod\Util\OperatingSystem;
 use RecursiveIteratorIterator;
 
 class FilePermissionServiceImpl implements FilePermissionService
@@ -104,7 +104,7 @@ class FilePermissionServiceImpl implements FilePermissionService
 
     public function scan(): self
     {
-        if (OperativeSystem::isWindows()) {
+        if (OperatingSystem::isWindows()) {
             return $this;
         }
 

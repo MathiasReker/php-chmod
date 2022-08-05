@@ -13,7 +13,7 @@ namespace Tests\Unit;
 use FilesystemIterator;
 use MathiasReker\PhpChmod\Exception\InvalidArgumentException;
 use MathiasReker\PhpChmod\FilePerm;
-use MathiasReker\PhpChmod\Util\OperativeSystem;
+use MathiasReker\PhpChmod\Util\OperatingSystem;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -57,7 +57,7 @@ final class FilePermissionServiceImplTest extends TestCase
 
     protected function setUp(): void
     {
-        if (OperativeSystem::isWindows()) {
+        if (OperatingSystem::isWindows()) {
             self::markTestSkipped('All tests in this file are inactive for this operation system.');
         }
 
