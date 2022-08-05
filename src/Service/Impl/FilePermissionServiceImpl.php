@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the php-file-permissions package.
+ * This file is part of the php-chmod package.
  * (c) Mathias Reker <github@reker.dk>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -8,12 +8,12 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\Service\Impl;
+namespace MathiasReker\phpChmod\Service\Impl;
 
-use MathiasReker\Model\FilePermission;
-use MathiasReker\Service\FilePermissionService;
-use MathiasReker\Util\Iterator\Iterator;
-use MathiasReker\Util\OperativeSystem;
+use MathiasReker\phpChmod\Model\FilePermission;
+use MathiasReker\phpChmod\Service\FilePermissionService;
+use MathiasReker\phpChmod\Util\Iterator\Iterator;
+use MathiasReker\phpChmod\Util\OperativeSystem;
 use RecursiveIteratorIterator;
 
 class FilePermissionServiceImpl implements FilePermissionService

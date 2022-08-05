@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the php-file-permissions package.
+ * This file is part of the php-chmod package.
  * (c) Mathias Reker <github@reker.dk>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\Model;
+namespace MathiasReker\phpChmod\Model;
 
-use MathiasReker\Exception\InvalidArgumentException;
+use MathiasReker\phpChmod\Exception\InvalidArgumentException;
 
 final class FilePermission
 {

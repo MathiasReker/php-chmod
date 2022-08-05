@@ -33,7 +33,7 @@ Dry run:
 ```php
 <?php
 
-use MathiasReker\FilePerm;
+use MathiasReker\phpChmod\FilePerm;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -53,7 +53,7 @@ Fix:
 ```php
 <?php
 
-use MathiasReker\FilePerm;
+use MathiasReker\phpChmod\FilePerm;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -112,7 +112,7 @@ $result->scan();
 $result->setConcernedPaths($paths);
 ```
 
-`dryRun` run returns an array of concerned files/folders:
+`dryRun` returns an array of concerned files/folders:
 
 ```php
 $result->dryRun();

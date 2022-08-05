@@ -1,12 +1,13 @@
 {
-  "name": "mathiasreker/php-file-permissions",
+  "name": "mathiasreker/php-chmod",
   "description": "File permission library for PHP",
   "license": "MIT",
   "type": "library",
   "keywords": [
     "file",
     "folder",
-    "permissions"
+    "permissions",
+    "chmod"
   ],
   "authors": [
     {
@@ -14,7 +15,7 @@
       "role": "Developer"
     }
   ],
-  "homepage": "https://github.com/mathiasreker/php-file-permissions",
+  "homepage": "https://github.com/mathiasreker/php-chmod",
   "require": {
     "php": ">=7.4.0",
     "ext-mbstring": "*"
@@ -27,7 +28,7 @@
   },
   "autoload": {
     "psr-4": {
-      "MathiasReker\\": "src/"
+      "MathiasReker\\phpChmod\\": "src/"
     }
   },
   "autoload-dev": {
