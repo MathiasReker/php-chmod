@@ -19,19 +19,19 @@ final class Scanner
      */
     private const INVALID_PERMISSION = 'Invalid permission.';
 
-    private ?int $defaultModeFiles = null;
+    private ?int $defaultFileModes = null;
 
-    private ?int $defaultModeFolders = null;
-
-    /**
-     * @var int[]
-     */
-    private array $allowedModeFiles = [];
+    private ?int $defaultDirectoryModes = null;
 
     /**
      * @var int[]
      */
-    private array $allowedModeFolders = [];
+    private array $allowedFileModes = [];
+
+    /**
+     * @var int[]
+     */
+    private array $allowedDirectoryModes = [];
 
     /**
      * @var string[]
@@ -43,24 +43,24 @@ final class Scanner
      */
     private array $excludedNames = [];
 
-    public function setDefaultModeFile(int $defaultModeFiles): self
+    public function setDefaultFileMode(int $defaultFileModes): self
     {
-        if (!$this->isValidMode($defaultModeFiles)) {
+        if (!$this->isValidMode($defaultFileModes)) {
             throw new InvalidArgumentException(self::INVALID_PERMISSION);
         }
 
-        $this->defaultModeFiles = $defaultModeFiles;
+        $this->defaultFileModes = $defaultFileModes;
 
         return $this;
     }
 
-    public function setDefaultModeFolder(int $defaultModeFolders): self
+    public function setDefaultDirectoryMode(int $defaultDirectoryModes): self
     {
-        if (!$this->isValidMode($defaultModeFolders)) {
+        if (!$this->isValidMode($defaultDirectoryModes)) {
             throw new InvalidArgumentException(self::INVALID_PERMISSION);
         }
 
-        $this->defaultModeFolders = $defaultModeFolders;
+        $this->defaultDirectoryModes = $defaultDirectoryModes;
 
         return $this;
     }
@@ -68,23 +68,23 @@ final class Scanner
     /**
      * @return int[]
      */
-    public function getAllowedModeFiles(): array
+    public function getAllowedFileModes(): array
     {
-        return $this->allowedModeFiles;
+        return $this->allowedFileModes;
     }
 
     /**
-     * @param int[] $allowedModeFiles
+     * @param int[] $allowedFileModes
      */
-    public function setAllowedModeFiles(array $allowedModeFiles): self
+    public function setAllowedFileModes(array $allowedFileModes): self
     {
-        foreach ($allowedModeFiles as $allowedModeFile) {
+        foreach ($allowedFileModes as $allowedModeFile) {
             if (!$this->isValidMode($allowedModeFile)) {
                 throw new InvalidArgumentException(self::INVALID_PERMISSION);
             }
         }
 
-        $this->allowedModeFiles = $allowedModeFiles;
+        $this->allowedFileModes = $allowedFileModes;
 
         return $this;
     }
@@ -92,24 +92,24 @@ final class Scanner
     /**
      * @return int[]
      */
-    public function getAllowedModeFolders(): array
+    public function getAllowedDirectoryModes(): array
     {
-        return $this->allowedModeFolders;
+        return $this->allowedDirectoryModes;
     }
 
     /**
-     * @param int[] $allowedModeFolders
+     * @param int[] $allowedDirectoryModes
      */
-    public function setAllowedModeFolders(
-        array $allowedModeFolders
+    public function setAllowedDirectoryModes(
+        array $allowedDirectoryModes
     ): self {
-        foreach ($allowedModeFolders as $allowedModeFolder) {
-            if (!$this->isValidMode($allowedModeFolder)) {
+        foreach ($allowedDirectoryModes as $allowedDirectoryMode) {
+            if (!$this->isValidMode($allowedDirectoryMode)) {
                 throw new InvalidArgumentException(self::INVALID_PERMISSION);
             }
         }
 
-        $this->allowedModeFolders = $allowedModeFolders;
+        $this->allowedDirectoryModes = $allowedDirectoryModes;
 
         return $this;
     }
@@ -150,14 +150,14 @@ final class Scanner
         return $this;
     }
 
-    public function getDefaultModeFiles(): ?int
+    public function getDefaultFileModes(): ?int
     {
-        return $this->defaultModeFiles;
+        return $this->defaultFileModes;
     }
 
-    public function getDefaultModeFolders(): ?int
+    public function getDefaultDirectoryModes(): ?int
     {
-        return $this->defaultModeFolders;
+        return $this->defaultDirectoryModes;
     }
 
     private function isValidMode(int $mode): bool

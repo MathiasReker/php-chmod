@@ -38,10 +38,10 @@ use MathiasReker\PhpChmod\Scanner;
 require __DIR__ . '/vendor/autoload.php';
 
 $result = (new Scanner())
-    ->setDefaultModeFile(0644)
-    ->setDefaultModeFolder(0755)
-    ->setAllowedModeFiles([0400, 0444, 0640])
-    ->setAllowedModeFolders([0750])
+    ->setDefaultFileMode(0644)
+    ->setDefaultDirectoryMode(0755)
+    ->setAllowedFileModes([0400, 0444, 0640])
+    ->setAllowedDirectoryModes([0750])
     ->scan([__DIR__])
     ->dryRun();
 
@@ -58,10 +58,10 @@ use MathiasReker\PhpChmod\Scanner;
 require __DIR__ . '/vendor/autoload.php';
 
 $result = (new Scanner())
-    ->setDefaultModeFile(0644)
-    ->setDefaultModeFolder(0755)
-    ->setAllowedModeFiles([0400, 0444, 0640])
-    ->setAllowedModeFolders([0750])
+    ->setDefaultFileMode(0644)
+    ->setDefaultDirectoryMode(0755)
+    ->setAllowedFileModes([0400, 0444, 0640])
+    ->setAllowedDirectoryModes([0750])
     ->scan([__DIR__])
     ->fix();
 
@@ -74,37 +74,38 @@ var_dump($result); // bool
 $result = new Scanner();
 ```
 
-`setDefaultModeFile` sets the default file permission:
+`setDefaultFileMode` sets the default file permission:
 
 ```php
-$result->setDefaultModeFile(0644);
+$result->setDefaultFileMode(0644);
 ```
 
-`setDefaultModeFolder` sets the default folder permission:
+`setDefaultDirectoryMode` sets the default directory permission:
 
 ```php
-$result->setDefaultModeFolder(0755);
+$result->setDefaultDirectoryMode(0755);
 ```
 
-`setAllowedModeFiles` sets the allowed permissions for files. Files with these permissions will be skipped:
+`setAllowedFileModes` sets the allowed permissions for files. Files with these permissions will be skipped:
 
 ```php
-$result->setAllowedModeFiles([0400, 0444, 0640]);
+$result->setAllowedFileModes([0400, 0444, 0640]);
 ```
 
-`setAllowedModeFolders` sets the allowed permissions for folders. Folders with these permissions will be skipped:
+`setAllowedDirectoryModes` sets the allowed permissions for directories. Directories with these permissions will be
+skipped:
 
 ```php
-$result->setAllowedModeFolders([0750]);
+$result->setAllowedDirectoryModes([0750]);
 ```
 
-`excludedNames` excludes a list of files/folder names (not paths):
+`excludedNames` excludes a list of files/directory names (not paths):
 
 ```php
 $result->excludedNames(['.docker']);
 ```
 
-`scan` finds all the concerned files/folders:
+`scan` finds all the concerned files/directories:
 
 ```php
 $result->scan([__DIR__]);
@@ -116,13 +117,13 @@ $result->scan([__DIR__]);
 $result->setConcernedPaths($paths);
 ```
 
-`dryRun` returns an array of concerned files/folders:
+`dryRun` returns an array of concerned files/directories:
 
 ```php
 $result->dryRun();
 ```
 
-`fix` changes the concerned file/folder permissions to the default mode:
+`fix` changes the concerned file/directory permissions to the default mode:
 
 ```php
 $result->fix();

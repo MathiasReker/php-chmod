@@ -14,23 +14,23 @@ final class FileSystemCache
 {
     private string $directory;
 
-    private int $directoryPermission;
+    private int $directoryMode;
 
-    public function __construct(string $directory, int $directoryPermission)
+    public function __construct(string $directory, int $directoryMode)
     {
         $this->directory = $directory;
 
-        $this->directoryPermission = $directoryPermission;
+        $this->directoryMode = $directoryMode;
     }
 
-    public function store(string $fileName, int $filePermission): void
+    public function store(string $fileName, int $fileMode): void
     {
         if (!is_dir($this->directory)) {
             clearstatcache();
 
-            mkdir($this->directory, $this->directoryPermission, true);
+            mkdir($this->directory, $this->directoryMode, true);
 
-            chmod($this->directory, $this->directoryPermission); // this line is needed
+            chmod($this->directory, $this->directoryMode); // this line is needed
         }
 
         $file = $this->directory . '/' . $fileName;
@@ -40,7 +40,7 @@ final class FileSystemCache
 
             clearstatcache();
 
-            chmod($file, $filePermission);
+            chmod($file, $fileMode);
         }
     }
 }

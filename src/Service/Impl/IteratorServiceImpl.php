@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace MathiasReker\PhpChmod\Service\Impl;
 
+use Closure;
 use FilesystemIterator;
 use MathiasReker\PhpChmod\Model\Iterator;
 use MathiasReker\PhpChmod\Service\IteratorService;
@@ -42,15 +43,18 @@ final class IteratorServiceImpl implements IteratorService
 
     public function getPaths(): RecursiveIteratorIterator
     {
-        $closure = fn ($path) => !\in_array($path->getFilename(), $this->iterator->getExcludedDirectories(), true);
-
         return new RecursiveIteratorIterator(
             new RecursiveCallbackFilterIterator(
                 new RecursiveDirectoryIterator($this->iterator->getDirectory(), FilesystemIterator::SKIP_DOTS),
-                $closure
+                $this->getClosure()
             ),
             RecursiveIteratorIterator::SELF_FIRST,
             RecursiveIteratorIterator::CATCH_GET_CHILD
         );
+    }
+
+    private function getClosure(): Closure
+    {
+        return fn ($path) => !\in_array($path->getFilename(), $this->iterator->getExcludedDirectories(), true);
     }
 }

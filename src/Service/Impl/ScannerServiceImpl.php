@@ -53,43 +53,43 @@ class ScannerServiceImpl implements ScannerService
             chmod(
                 $concernedPath,
                 is_dir($concernedPath)
-                    ? $this->scanner->getDefaultModeFolders()
-                    : $this->scanner->getDefaultModeFiles()
+                    ? $this->scanner->getDefaultDirectoryModes()
+                    : $this->scanner->getDefaultFileModes()
             );
         }
     }
 
-    public function setDefaultModeFolder(int $defaultModeFolders): self
+    public function setDefaultDirectoryMode(int $defaultDirectoryMode): self
     {
-        $this->scanner->setDefaultModeFolder($defaultModeFolders);
+        $this->scanner->setDefaultDirectoryMode($defaultDirectoryMode);
 
         return $this;
     }
 
-    public function setDefaultModeFile(int $defaultModeFiles): self
+    public function setDefaultFileMode(int $defaultFileMode): self
     {
-        $this->scanner->setDefaultModeFile($defaultModeFiles);
-
-        return $this;
-    }
-
-    /**
-     * @param int[] $allowedModeFiles
-     */
-    public function setAllowedModeFiles(array $allowedModeFiles): self
-    {
-        $this->scanner->setAllowedModeFiles($allowedModeFiles);
+        $this->scanner->setDefaultFileMode($defaultFileMode);
 
         return $this;
     }
 
     /**
-     * @param int[] $allowedModeFolders
+     * @param int[] $allowedFileModes
      */
-    public function setAllowedModeFolders(
-        array $allowedModeFolders
+    public function setAllowedFileModes(array $allowedFileModes): self
+    {
+        $this->scanner->setAllowedFileModes($allowedFileModes);
+
+        return $this;
+    }
+
+    /**
+     * @param int[] $allowedDirectoryModes
+     */
+    public function setAllowedDirectoryModes(
+        array $allowedDirectoryModes
     ): self {
-        $this->scanner->setAllowedModeFolders($allowedModeFolders);
+        $this->scanner->setAllowedDirectoryModes($allowedDirectoryModes);
 
         return $this;
     }
@@ -107,7 +107,7 @@ class ScannerServiceImpl implements ScannerService
                     ->setExcludedNames($this->scanner->getExcludedNames())
                     ->getPaths();
 
-                $this->checkPerms($paths);
+                $this->addConcernedPaths($paths);
             }
         }
 
@@ -121,7 +121,7 @@ class ScannerServiceImpl implements ScannerService
         return $this;
     }
 
-    private function checkPerms(RecursiveIteratorIterator $paths): void
+    private function addConcernedPaths(RecursiveIteratorIterator $paths): void
     {
         $result = [];
 
@@ -129,19 +129,19 @@ class ScannerServiceImpl implements ScannerService
             $currentMode = $path->getPerms() & 0777;
 
             if ($path->isDir()) {
-                if (null === $this->scanner->getDefaultModeFolders()) {
+                if (null === $this->scanner->getDefaultDirectoryModes()) {
                     continue;
                 }
 
-                if (\in_array($currentMode, $this->scanner->getAllowedModeFolders(), true)) {
+                if (\in_array($currentMode, $this->scanner->getAllowedDirectoryModes(), true)) {
                     continue;
                 }
             } else {
-                if (null === $this->scanner->getDefaultModeFiles()) {
+                if (null === $this->scanner->getDefaultFileModes()) {
                     continue;
                 }
 
-                if (\in_array($currentMode, $this->scanner->getAllowedModeFiles(), true)) {
+                if (\in_array($currentMode, $this->scanner->getAllowedFileModes(), true)) {
                     continue;
                 }
             }

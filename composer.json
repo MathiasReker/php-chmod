@@ -1,11 +1,11 @@
 {
   "name": "mathiasreker/php-chmod",
-  "description": "File permission library for PHP",
+  "description": "php-chmod is a PHP library for easily changing permissions recursively.",
   "license": "MIT",
   "type": "library",
   "keywords": [
     "file",
-    "folder",
+    "directory",
     "permissions",
     "chmod"
   ],

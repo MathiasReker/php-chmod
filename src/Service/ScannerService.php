@@ -16,13 +16,13 @@ interface ScannerService
 
     public function fix();
 
-    public function setDefaultModeFile(int $defaultModeFiles);
+    public function setDefaultFileMode(int $defaultFileMode);
 
-    public function setDefaultModeFolder(int $defaultModeFolders);
+    public function setDefaultDirectoryMode(int $defaultDirectoryMode);
 
-    public function setAllowedModeFiles(array $allowedModeFiles);
+    public function setAllowedFileModes(array $allowedFileModes);
 
-    public function setAllowedModeFolders(array $allowedModeFolders);
+    public function setAllowedDirectoryModes(array $allowedDirectoryModes);
 
     public function setExcludeNames(array $setExcludedNames);
 

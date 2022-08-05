@@ -89,10 +89,10 @@ final class FilePermissionServiceImplTest extends TestCase
     public function testFilePermissionIsNotChangedIfAllowedModeFiles(): void
     {
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([0400])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([0400])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
@@ -102,10 +102,10 @@ final class FilePermissionServiceImplTest extends TestCase
     public function testFilePermissionIsChangedIfNotAllowedModeFiles(): void
     {
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
@@ -115,10 +115,10 @@ final class FilePermissionServiceImplTest extends TestCase
     public function testFolderPermissionIsNotChangedIfAllowedModeFolders(): void
     {
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([0777])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([0777])
             ->scan([self::ROOT])
             ->fix();
 
@@ -128,10 +128,10 @@ final class FilePermissionServiceImplTest extends TestCase
     public function testFolderPermissionIsChangedIfNotAllowedModeFolders(): void
     {
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
@@ -141,10 +141,10 @@ final class FilePermissionServiceImplTest extends TestCase
     public function testFilePermissionIsChangedIfDifferentToDefault(): void
     {
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
@@ -156,10 +156,10 @@ final class FilePermissionServiceImplTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultModeFile(-1)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(-1)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
@@ -169,10 +169,10 @@ final class FilePermissionServiceImplTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultModeFile(1)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(1)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
@@ -182,10 +182,10 @@ final class FilePermissionServiceImplTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(-1)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(-1)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
@@ -195,10 +195,10 @@ final class FilePermissionServiceImplTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(1)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(1)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
@@ -208,10 +208,10 @@ final class FilePermissionServiceImplTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([-1])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([-1])
             ->scan([self::ROOT])
             ->fix();
     }
@@ -221,10 +221,10 @@ final class FilePermissionServiceImplTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([1])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([1])
             ->scan([self::ROOT])
             ->fix();
     }
@@ -234,10 +234,10 @@ final class FilePermissionServiceImplTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([-1])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([-1])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
@@ -247,10 +247,10 @@ final class FilePermissionServiceImplTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([1])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([1])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
     }
@@ -258,10 +258,10 @@ final class FilePermissionServiceImplTest extends TestCase
     public function testDryRun(): void
     {
         $result = (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->dryRun();
 
@@ -272,10 +272,10 @@ final class FilePermissionServiceImplTest extends TestCase
     {
         $result = (new Scanner())
             ->setExcludeNames(['foo'])
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->dryRun();
 
@@ -286,10 +286,10 @@ final class FilePermissionServiceImplTest extends TestCase
     {
         $result = (new Scanner())
             ->setExcludeNames(['444.php'])
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->dryRun();
 
@@ -299,10 +299,10 @@ final class FilePermissionServiceImplTest extends TestCase
     public function testConcernedPaths(): void
     {
         $result = (new Scanner())
-            ->setDefaultModeFile(0644)
-            ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->setConcernedPaths([__DIR__ . '/tmp/foo'])
             ->dryRun();
 
@@ -315,8 +315,8 @@ final class FilePermissionServiceImplTest extends TestCase
     public function testEmptyFileAndFolderPermissions(): void
     {
         $result = (new Scanner())
-            ->setAllowedModeFiles([])
-            ->setAllowedModeFolders([])
+            ->setAllowedFileModes([])
+            ->setAllowedDirectoryModes([])
             ->scan([self::ROOT])
             ->dryRun();
 
