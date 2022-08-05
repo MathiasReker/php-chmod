@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the php-file-permissions package.
+ * This file is part of the php-chmod package.
  * (c) Mathias Reker <github@reker.dk>
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use FilesystemIterator;
-use MathiasReker\Exception\InvalidArgumentException;
-use MathiasReker\FilePerm;
-use MathiasReker\Util\OperativeSystem;
+use MathiasReker\PhpChmod\Exception\InvalidArgumentException;
+use MathiasReker\PhpChmod\FilePerm;
+use MathiasReker\PhpChmod\Util\OperativeSystem;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
