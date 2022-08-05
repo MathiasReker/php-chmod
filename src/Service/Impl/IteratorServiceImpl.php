@@ -34,9 +34,9 @@ final class IteratorServiceImpl implements IteratorService
         return $this;
     }
 
-    public function setExcludedNames(array $excludedDirectories): self
+    public function setExcludedNames(array $excludedNames): self
     {
-        $this->iterator->setExcludedDirectories($excludedDirectories);
+        $this->iterator->setExcludedDirectories($excludedNames);
 
         return $this;
     }

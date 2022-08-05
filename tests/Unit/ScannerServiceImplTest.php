@@ -312,6 +312,23 @@ final class ScannerServiceImplTest extends TestCase
         );
     }
 
+    public function testConcernedPaths2(): void
+    {
+        $result = (new Scanner())
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
+            ->addConcernedPaths([__DIR__ . '/tmp/foo'])
+            ->addConcernedPaths([__DIR__ . '/tmp/bar'])
+            ->dryRun();
+
+        self::assertSame(
+            array_map(static fn ($x) => realpath($x), [__DIR__ . '/tmp/foo', __DIR__ . '/tmp/bar']),
+            array_map(static fn ($x) => realpath($x), $result)
+        );
+    }
+
     public function testEmptyFileAndDirectoryModes(): void
     {
         $result = (new Scanner())

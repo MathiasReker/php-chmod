@@ -86,23 +86,23 @@ $result->setDefaultFileMode(0644);
 $result->setDefaultDirectoryMode(0755);
 ```
 
-`setAllowedFileModes` sets the allowed permissions for files. Files with these permissions will be skipped:
+`setExcludedFileModes` sets the allowed permissions for files. Files with these permissions will be skipped:
 
 ```php
-$result->setAllowedFileModes([0400, 0444, 0640]);
+$result->setExcludedFileModes([0400, 0444, 0640]);
 ```
 
-`setAllowedDirectoryModes` sets the allowed permissions for directories. Directories with these permissions will be
+`setExcludedDirectoryModes` sets the allowed permissions for directories. Directories with these permissions will be
 skipped:
 
 ```php
-$result->setAllowedDirectoryModes([0750]);
+$result->setExcludedDirectoryModes([0750]);
 ```
 
-`excludedNames` excludes a list of files/directory names (not paths):
+`setExcludedNames` excludes a list of file/directory names (not paths):
 
 ```php
-$result->excludedNames(['.docker']);
+$result->setExcludedNames(['.docker']);
 ```
 
 `scan` finds all the concerned files/directories:
@@ -111,10 +111,10 @@ $result->excludedNames(['.docker']);
 $result->scan([__DIR__]);
 ```
 
-`setConcernedPaths` sets concerned files manually. This is useful if you want to use a custom scanner:
+`addConcernedPaths` sets concerned files manually. This is useful if you want to use a custom scanner:
 
 ```php
-$result->setConcernedPaths($paths);
+$result->addConcernedPaths($paths);
 ```
 
 `dryRun` returns an array of concerned files/directories:

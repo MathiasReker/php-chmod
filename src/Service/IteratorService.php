@@ -12,7 +12,7 @@ namespace MathiasReker\PhpChmod\Service;
 
 interface IteratorService
 {
-    public function setExcludedNames(array $excludedDirectories);
+    public function setExcludedNames(array $excludedNames);
 
     public function setDirectory(string $directory);
 
