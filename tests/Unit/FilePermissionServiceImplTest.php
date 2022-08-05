@@ -55,6 +55,37 @@ final class FilePermissionServiceImplTest extends TestCase
      */
     private const ROOT = __DIR__ . '/tmp';
 
+    protected function setUp(): void
+    {
+        if (OperativeSystem::isWindows()) {
+            self::markTestSkipped('All tests in this file are inactive for this operation system.');
+        }
+
+        foreach (self::FOLDER_PERMS as $directory => $directoryPerm) {
+            foreach (self::FILE_PERMS as $file => $filePerm) {
+                (new FileSystemCache(self::ROOT . '/' . $directory, $directoryPerm))
+                    ->store($file, $filePerm);
+            }
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        $paths = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(self::ROOT, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach ($paths as $path) {
+            if ($path->isDir()) {
+                rmdir($path->getRealPath());
+            } else {
+                unlink($path->getRealPath());
+            }
+        }
+
+        rmdir(self::ROOT);
+    }
+
     public function testFilePermissionIsNotChangedIfAllowedModeFiles(): void
     {
         (new FilePerm([self::ROOT]))
@@ -65,15 +96,7 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->fix();
 
-        self::assertSame(
-            0400,
-            $this->getPerms(self::ROOT . '/foo/400.php')
-        );
-    }
-
-    private function getPerms(string $file): int
-    {
-        return fileperms($file) & 0777;
+        self::assertSame(0400, $this->getPerms(self::ROOT . '/foo/400.php'));
     }
 
     public function testFilePermissionIsChangedIfNotAllowedModeFiles(): void
@@ -86,10 +109,7 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->fix();
 
-        self::assertSame(
-            0644,
-            $this->getPerms(self::ROOT . '/foo/400.php')
-        );
+        self::assertSame(0644, $this->getPerms(self::ROOT . '/foo/400.php'));
     }
 
     public function testFolderPermissionIsNotChangedIfAllowedModeFolders(): void
@@ -102,10 +122,7 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->fix();
 
-        self::assertSame(
-            0777,
-            $this->getPerms(self::ROOT . '/baz')
-        );
+        self::assertSame(0777, $this->getPerms(self::ROOT . '/baz'));
     }
 
     public function testFolderPermissionIsChangedIfNotAllowedModeFolders(): void
@@ -118,10 +135,7 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->fix();
 
-        self::assertSame(
-            0755,
-            $this->getPerms(self::ROOT . '/baz')
-        );
+        self::assertSame(0755, $this->getPerms(self::ROOT . '/baz'));
     }
 
     public function testFilePermissionIsChangedIfDifferentToDefault(): void
@@ -134,10 +148,7 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->fix();
 
-        self::assertSame(
-            0644,
-            $this->getPerms(self::ROOT . '/bar/666.php')
-        );
+        self::assertSame(0644, $this->getPerms(self::ROOT . '/bar/666.php'));
     }
 
     public function testDefaultFilePermissionIsNotValid(): void
@@ -254,10 +265,7 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->dryRun();
 
-        self::assertNotSame(
-            [],
-            $result
-        );
+        self::assertNotSame([], $result);
     }
 
     public function testExcludedFolders(): void
@@ -271,9 +279,7 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->dryRun();
 
-        self::assertNotTrue(
-            \in_array('foo', $result, true)
-        );
+        self::assertNotTrue(\in_array('foo', $result, true));
     }
 
     public function testExcludedFiles(): void
@@ -287,9 +293,7 @@ final class FilePermissionServiceImplTest extends TestCase
             ->scan()
             ->dryRun();
 
-        self::assertNotTrue(
-            \in_array('444.php', $result, true)
-        );
+        self::assertNotTrue(\in_array('444.php', $result, true));
     }
 
     public function testConcernedPaths(): void
@@ -308,35 +312,21 @@ final class FilePermissionServiceImplTest extends TestCase
         );
     }
 
-    protected function setUp(): void
+    public function testEmptyFileAndFolderPermissions(): void
     {
-        if (OperativeSystem::isWindows()) {
-            $this->markTestSkipped('All tests in this file are inactive for this operation system.');
-        }
+        $result = (new FilePerm([self::ROOT]))
+            ->setAllowedModeFiles([])
+            ->setAllowedModeFolders([])
+            ->dryRun();
 
-        foreach (self::FOLDER_PERMS as $directory => $directoryPerm) {
-            foreach (self::FILE_PERMS as $file => $filePerm) {
-                (new FileSystemCache(self::ROOT . '/' . $directory, $directoryPerm))
-                    ->store($file, $filePerm);
-            }
-        }
+        self::assertSame(
+            $result,
+            []
+        );
     }
 
-    protected function tearDown(): void
+    private function getPerms(string $file): int
     {
-        $paths = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(
-                self::ROOT, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST);
-
-        foreach ($paths as $path) {
-            if ($path->isDir()) {
-                rmdir($path->getRealPath());
-            } else {
-                unlink($path->getRealPath());
-            }
-        }
-
-        rmdir(self::ROOT);
+        return fileperms($file) & 0777;
     }
 }

@@ -57,6 +57,7 @@ class FilePermissionServiceImpl implements FilePermissionService
 
         foreach ($concernedPaths as $concernedPath) {
             clearstatcache();
+
             chmod(
                 $concernedPath,
                 is_dir($concernedPath)
@@ -118,6 +119,13 @@ class FilePermissionServiceImpl implements FilePermissionService
         return $this;
     }
 
+    public function setConcernedPaths(array $concernedPaths): self
+    {
+        $this->filePermission->addConcernedPaths($concernedPaths);
+
+        return $this;
+    }
+
     private function checkPerms(RecursiveIteratorIterator $paths): void
     {
         $result = [];
@@ -126,23 +134,26 @@ class FilePermissionServiceImpl implements FilePermissionService
             $currentMode = $path->getPerms() & 0777;
 
             if ($path->isDir()) {
+                if (null === $this->filePermission->getDefaultModeFolders()) {
+                    continue;
+                }
+
                 if (\in_array($currentMode, $this->filePermission->getAllowedModeFolders(), true)) {
                     continue;
                 }
-            } elseif (\in_array($currentMode, $this->filePermission->getAllowedModeFiles(), true)) {
-                continue;
+            } else {
+                if (null === $this->filePermission->getDefaultModeFiles()) {
+                    continue;
+                }
+
+                if (\in_array($currentMode, $this->filePermission->getAllowedModeFiles(), true)) {
+                    continue;
+                }
             }
 
             $result[] = $path->getRealPath();
         }
 
         $this->filePermission->addConcernedPaths($result);
-    }
-
-    public function setConcernedPaths(array $concernedPaths): self
-    {
-        $this->filePermission->addConcernedPaths($concernedPaths);
-
-        return $this;
     }
 }
