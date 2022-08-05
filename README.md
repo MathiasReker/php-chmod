@@ -118,7 +118,7 @@ $result->setConcernedPaths($paths);
 $result->dryRun();
 ```
 
-`fix` changes the concerned files/folders permission to the default mode:
+`fix` changes the concerned file/folder permissions to the default mode:
 
 ```php
 $result->fix();

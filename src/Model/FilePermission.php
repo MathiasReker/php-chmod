@@ -14,7 +14,7 @@ use MathiasReker\PhpChmod\Exception\InvalidArgumentException;
 
 final class FilePermission
 {
-    private const INVAlID_PERMISSION = 'Invalid permission.';
+    private const INVALID_PERMISSION = 'Invalid permission.';
 
     private ?int $defaultModeFiles = null;
 
@@ -56,7 +56,7 @@ final class FilePermission
     public function setDefaultModeFile(int $defaultModeFiles): self
     {
         if (!$this->isValidMode($defaultModeFiles)) {
-            throw new InvalidArgumentException(self::INVAlID_PERMISSION);
+            throw new InvalidArgumentException(self::INVALID_PERMISSION);
         }
 
         $this->defaultModeFiles = $defaultModeFiles;
@@ -67,7 +67,7 @@ final class FilePermission
     public function setDefaultModeFolder(int $defaultModeFolders): self
     {
         if (!$this->isValidMode($defaultModeFolders)) {
-            throw new InvalidArgumentException(self::INVAlID_PERMISSION);
+            throw new InvalidArgumentException(self::INVALID_PERMISSION);
         }
 
         $this->defaultModeFolders = $defaultModeFolders;
@@ -90,7 +90,7 @@ final class FilePermission
     {
         foreach ($allowedModeFiles as $allowedModeFile) {
             if (!$this->isValidMode($allowedModeFile)) {
-                throw new InvalidArgumentException(self::INVAlID_PERMISSION);
+                throw new InvalidArgumentException(self::INVALID_PERMISSION);
             }
         }
 
@@ -115,7 +115,7 @@ final class FilePermission
     ): self {
         foreach ($allowedModeFolders as $allowedModeFolder) {
             if (!$this->isValidMode($allowedModeFolder)) {
-                throw new InvalidArgumentException(self::INVAlID_PERMISSION);
+                throw new InvalidArgumentException(self::INVALID_PERMISSION);
             }
         }
 
