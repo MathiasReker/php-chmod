@@ -45,7 +45,7 @@
   },
   "scripts": {
     "php-cs-fixer": "./vendor/bin/php-cs-fixer fix . --dry-run --diff",
-    "phpstan": "./vendor/bin/phpstan analyse PhpChmod tests --level=5",
+    "phpstan": "./vendor/bin/phpstan analyse src tests --level=5",
     "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php --colors=always tests/"
   }
 }
