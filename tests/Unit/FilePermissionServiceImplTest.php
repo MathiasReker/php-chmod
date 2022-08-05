@@ -236,7 +236,7 @@ final class FilePermissionServiceImplTest extends TestCase
         (new FilePerm([self::ROOT]))
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
-            ->setAllowedModeFiles([1])
+            ->setAllowedModeFiles([-1])
             ->setAllowedModeFolders([])
             ->scan()
             ->fix();
