@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace MathiasReker\PhpChmod\Service\Impl;
 
-use Closure;
 use FilesystemIterator;
 use MathiasReker\PhpChmod\Model\Iterator;
 use MathiasReker\PhpChmod\Service\IteratorService;
