@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\phpChmod;
+namespace MathiasReker\PhpChmod;
 
-use MathiasReker\phpChmod\Service\Impl\FilePermissionServiceImpl;
+use MathiasReker\PhpChmod\Service\Impl\FilePermissionServiceImpl;
 
 final class FilePerm extends FilePermissionServiceImpl
 {

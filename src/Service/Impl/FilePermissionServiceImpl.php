@@ -8,12 +8,12 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\phpChmod\Service\Impl;
+namespace MathiasReker\PhpChmod\Service\Impl;
 
-use MathiasReker\phpChmod\Model\FilePermission;
-use MathiasReker\phpChmod\Service\FilePermissionService;
-use MathiasReker\phpChmod\Util\Iterator\Iterator;
-use MathiasReker\phpChmod\Util\OperativeSystem;
+use MathiasReker\PhpChmod\Model\FilePermission;
+use MathiasReker\PhpChmod\Service\FilePermissionService;
+use MathiasReker\PhpChmod\Util\Iterator\Iterator;
+use MathiasReker\PhpChmod\Util\OperativeSystem;
 use RecursiveIteratorIterator;
 
 class FilePermissionServiceImpl implements FilePermissionService

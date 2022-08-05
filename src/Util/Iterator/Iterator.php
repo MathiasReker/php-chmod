@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\phpChmod\Util\Iterator;
+namespace MathiasReker\PhpChmod\Util\Iterator;
 
 use FilesystemIterator;
 use RecursiveCallbackFilterIterator;

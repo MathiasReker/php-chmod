@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\phpChmod\Exception;
+namespace MathiasReker\PhpChmod\Exception;
 
 use RuntimeException;
 

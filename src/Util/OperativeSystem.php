@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\phpChmod\Util;
+namespace MathiasReker\PhpChmod\Util;
 
 final class OperativeSystem
 {

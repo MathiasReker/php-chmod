@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use FilesystemIterator;
-use MathiasReker\phpChmod\Exception\InvalidArgumentException;
-use MathiasReker\phpChmod\FilePerm;
-use MathiasReker\phpChmod\Util\OperativeSystem;
+use MathiasReker\PhpChmod\Exception\InvalidArgumentException;
+use MathiasReker\PhpChmod\FilePerm;
+use MathiasReker\PhpChmod\Util\OperativeSystem;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

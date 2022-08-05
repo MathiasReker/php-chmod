@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\phpChmod\Service;
+namespace MathiasReker\PhpChmod\Service;
 
 interface FilePermissionService
 {

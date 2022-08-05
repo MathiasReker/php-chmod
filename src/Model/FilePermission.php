@@ -8,9 +8,9 @@
 
 declare(strict_types=1);
 
-namespace MathiasReker\phpChmod\Model;
+namespace MathiasReker\PhpChmod\Model;
 
-use MathiasReker\phpChmod\Exception\InvalidArgumentException;
+use MathiasReker\PhpChmod\Exception\InvalidArgumentException;
 
 final class FilePermission
 {
