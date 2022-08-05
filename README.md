@@ -127,7 +127,7 @@ $result->fix();
 `exclude` excludes a list of files/folder names (not paths):
 
 ```php
-$result->exclude(['.docker']);
+$result->excludedNames(['.docker']);
 ```
 
 ### Roadmap

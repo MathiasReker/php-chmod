@@ -32,9 +32,9 @@ class FilePermissionServiceImpl implements FilePermissionService
         $this->iterator = new Iterator();
     }
 
-    public function setExclude($setExclude): self
+    public function setExcludeNames($setExcludedNames): self
     {
-        $this->filePermission->setExclude($setExclude);
+        $this->filePermission->setExcludeNames($setExcludedNames);
 
         return $this;
     }
@@ -112,7 +112,7 @@ class FilePermissionServiceImpl implements FilePermissionService
 
         foreach ($directories as $directory) {
             if (is_dir($directory)) {
-                $this->checkPerms($this->iterator->filter($directory, $this->filePermission->getExclude()));
+                $this->checkPerms($this->iterator->filter($directory, $this->filePermission->getExcludedNames()));
             }
         }
 

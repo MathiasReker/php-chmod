@@ -43,7 +43,7 @@ final class FilePermission
     /**
      * @var string[]
      */
-    private array $exclude = [];
+    private array $excludedNames = [];
 
     /**
      * @param string[] $directories
@@ -153,17 +153,17 @@ final class FilePermission
     /**
      * @return string[]
      */
-    public function getExclude(): array
+    public function getExcludedNames(): array
     {
-        return $this->exclude;
+        return $this->excludedNames;
     }
 
     /**
-     * @param string[] $exclude
+     * @param string[] $excludedNames
      */
-    public function setExclude(array $exclude): self
+    public function setExcludeNames(array $excludedNames): self
     {
-        $this->exclude = $exclude;
+        $this->excludedNames = $excludedNames;
 
         return $this;
     }

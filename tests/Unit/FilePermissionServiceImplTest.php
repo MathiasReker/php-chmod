@@ -271,7 +271,7 @@ final class FilePermissionServiceImplTest extends TestCase
     public function testExcludedFolders(): void
     {
         $result = (new FilePerm([self::ROOT]))
-            ->setExclude(['foo'])
+            ->setExcludeNames(['foo'])
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
@@ -285,7 +285,7 @@ final class FilePermissionServiceImplTest extends TestCase
     public function testExcludedFiles(): void
     {
         $result = (new FilePerm([self::ROOT]))
-            ->setExclude(['444.php'])
+            ->setExcludeNames(['444.php'])
             ->setDefaultModeFile(0644)
             ->setDefaultModeFolder(0755)
             ->setAllowedModeFiles([])
