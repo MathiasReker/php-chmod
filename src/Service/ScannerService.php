@@ -26,5 +26,5 @@ interface ScannerService
 
     public function setExcludeNames(array $setExcludedNames);
 
-    public function addConcernedPaths(array $concernedPaths);
+    public function setConcernedPaths(array $concernedPaths);
 }

@@ -58,7 +58,7 @@ final class ScannerServiceImplTest extends TestCase
     protected function setUp(): void
     {
         if (OperatingSystem::isWindows()) {
-            self::markTestSkipped('Tests in this class are skipped for Windows.');
+         //   self::markTestSkipped('Tests in this class are skipped for Windows.');
         }
 
         foreach (self::DIRECTORY_MODES as $directory => $directoryMode) {
@@ -303,28 +303,11 @@ final class ScannerServiceImplTest extends TestCase
             ->setDefaultDirectoryMode(0755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
-            ->addConcernedPaths([__DIR__ . '/tmp/foo'])
+            ->setConcernedPaths([__DIR__ . '/tmp/foo'])
             ->dryRun();
 
         self::assertSame(
             array_map(static fn ($x) => realpath($x), [__DIR__ . '/tmp/foo']),
-            array_map(static fn ($x) => realpath($x), $result)
-        );
-    }
-
-    public function testConcernedPaths2(): void
-    {
-        $result = (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
-            ->setExcludedFileModes([])
-            ->setExcludedDirectoryModes([])
-            ->addConcernedPaths([__DIR__ . '/tmp/foo'])
-            ->addConcernedPaths([__DIR__ . '/tmp/bar'])
-            ->dryRun();
-
-        self::assertSame(
-            array_map(static fn ($x) => realpath($x), [__DIR__ . '/tmp/foo', __DIR__ . '/tmp/bar']),
             array_map(static fn ($x) => realpath($x), $result)
         );
     }

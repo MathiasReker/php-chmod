@@ -111,10 +111,10 @@ $result->setExcludedNames(['.docker']);
 $result->scan([__DIR__]);
 ```
 
-`addConcernedPaths` sets concerned files manually. This is useful if you want to use a custom scanner:
+`setConcernedPaths` sets concerned files manually. This is useful if you want to use a custom scanner:
 
 ```php
-$result->addConcernedPaths($paths);
+$result->setConcernedPaths($paths);
 ```
 
 `dryRun` returns an array of concerned files/directories:

@@ -114,7 +114,7 @@ class ScannerServiceImpl implements ScannerService
         return $this;
     }
 
-    public function addConcernedPaths(array $concernedPaths): self
+    public function setConcernedPaths(array $concernedPaths): self
     {
         $this->scanner->addConcernedPaths($concernedPaths);
 
