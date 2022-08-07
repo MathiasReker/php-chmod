@@ -17,8 +17,9 @@
   ],
   "homepage": "https://github.com/mathiasreker/php-chmod",
   "require": {
-    "php": ">=7.4.0",
-    "ext-mbstring": "*"
+    "php": ">=7.4",
+    "ext-mbstring": "*",
+    "symfony/finder": "^5.4"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "^2.28",
@@ -33,7 +34,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "MathiasReker\\PhpChmod\\Tests\\": "tests/"
     }
   },
   "config": {

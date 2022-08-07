@@ -23,6 +23,8 @@ final class Scanner
 
     private ?int $defaultDirectoryModes = null;
 
+    private array $getExcludedPaths = [];
+
     /**
      * @var int[]
      */
@@ -42,6 +44,11 @@ final class Scanner
      * @var string[]
      */
     private array $excludedNames = [];
+
+    /**
+     * @var string[]
+     */
+    private array $names = [];
 
     public function setDefaultFileMode(int $defaultFileModes): self
     {
@@ -74,12 +81,23 @@ final class Scanner
     }
 
     /**
+     * @param string[] $getExcludedPaths
+     */
+    public function setExcludedPaths(array $getExcludedPaths): self
+    {
+        $this->getExcludedPaths = $getExcludedPaths;
+
+        return $this;
+    }
+
+    /**
      * @param int[] $excludedFileModes
      */
-    public function setExcludedFileModes(array $excludedFileModes): self
-    {
-        foreach ($excludedFileModes as $excludedModeFile) {
-            if (!$this->isValidMode($excludedModeFile)) {
+    public function setExcludedFileModes(
+        array $excludedFileModes
+    ): self {
+        foreach ($excludedFileModes as $excludedFileMode) {
+            if (!$this->isValidMode($excludedFileMode)) {
                 throw new InvalidArgumentException(self::INVALID_PERMISSION);
             }
         }
@@ -138,6 +156,32 @@ final class Scanner
     public function getExcludedNames(): array
     {
         return $this->excludedNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNames(): array
+    {
+        return $this->names;
+    }
+
+    /**
+     * @param string[] $names
+     */
+    public function setNames(array $names): self
+    {
+        $this->names = $names;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getExcludedPaths(): array
+    {
+        return $this->getExcludedPaths;
     }
 
     /**

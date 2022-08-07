@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace MathiasReker\PhpChmod;
 
-use MathiasReker\PhpChmod\Service\Impl\ScannerServiceImpl;
+use MathiasReker\PhpChmod\Service\ScannerService;
 
-final class Scanner extends ScannerServiceImpl
+final class Scanner extends ScannerService
 {
 }
