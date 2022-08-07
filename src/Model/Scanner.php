@@ -19,6 +19,11 @@ final class Scanner
      */
     private const INVALID_PERMISSION = 'Invalid permission.';
 
+    /**
+     * @var mixed[]
+     */
+    private const NAMES = [];
+
     private ?int $defaultFileModes = null;
 
     private ?int $defaultDirectoryModes = null;
@@ -151,6 +156,21 @@ final class Scanner
     public function getExcludedNames(): array
     {
         return $this->excludedNames;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getNames(): array
+    {
+        return self::NAMES;
+    }
+
+    public function setNames(array $names): self
+    {
+        $this->setNames($names);
+
+        return $this;
     }
 
     /**

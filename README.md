@@ -109,6 +109,12 @@ $result->setExcludedNames(['*.rb', '*.py']);
 $result->getExcludedPaths(['first/dir', 'other/dir']);
 ```
 
+`setNames` is useful if you only want to scan for files having a specific pattern:
+
+```php
+$result->setNames(['*.php']);
+```
+
 `scan` finds all the concerned files/directories:
 
 ```php

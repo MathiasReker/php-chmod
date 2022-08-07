@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace MathiasReker\PhpChmod\Tests\Unit;
 
 use FilesystemIterator;
 use MathiasReker\PhpChmod\Exception\InvalidArgumentException;
@@ -21,7 +21,7 @@ use RecursiveIteratorIterator;
 /**
  * @internal
  *
- * @covers \ScannerServiceImpl
+ * @covers \MathiasReker\PhpChmod\Service\ScannerService
  *
  * @small
  */
@@ -39,6 +39,7 @@ final class ScannerServiceImplTest extends TestCase
         '700.php' => 0700,
         '750.php' => 0750,
         '755.php' => 0755,
+        'test.sh' => 0777,
     ];
 
     /**
@@ -310,6 +311,51 @@ final class ScannerServiceImplTest extends TestCase
             array_map(static fn ($x) => realpath($x), [__DIR__ . '/tmp/foo']),
             array_map(static fn ($x) => realpath($x), $result)
         );
+    }
+
+    public function testExcludedPhpFiles(): void
+    {
+        $result = (new Scanner())
+            ->setExcludeNames(['*.php'])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
+            ->scan([self::ROOT])
+            ->dryRun();
+
+        self::assertSame(
+            $result,
+            []
+        );
+    }
+
+    public function testExcludedShellFilesButIncludedEverythingElse(): void
+    {
+        $result = (new Scanner())
+            ->setExcludeNames(['*.sh'])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
+            ->scan([self::ROOT])
+            ->dryRun();
+
+        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/foo/test.sh'), $result, true));
+    }
+
+    public function testIncludeOnlyPhpFiles(): void
+    {
+        $result = (new Scanner())
+            ->setNames(['*.php'])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setExcludedFileModes([])
+            ->setExcludedDirectoryModes([])
+            ->scan([self::ROOT])
+            ->dryRun();
+
+        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/foo/test.sh'), $result, true));
     }
 
     public function testEmptyFileAndDirectoryModes(): void

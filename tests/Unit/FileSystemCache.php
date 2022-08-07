@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace MathiasReker\PhpChmod\Tests\Unit;
 
 final class FileSystemCache
 {
