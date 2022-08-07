@@ -15,7 +15,7 @@
 
 | Version | PHP  | Documentation |
 |---------|------|---------------|
-| ^1.0    | ^7.4 | current       |
+| ^1.1    | ^7.4 | current       |
 
 ### Requirements
 
