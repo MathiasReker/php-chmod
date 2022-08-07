@@ -109,10 +109,10 @@ $result->setExcludedNames(['*.rb', '*.py']);
 $result->setNames(['*.php']);
 ```
 
-`getExcludedPaths` excludes a list of file/directory paths:
+`setExcludedPaths` excludes a list of file/directory paths:
 
 ```php
-$result->getExcludedPaths(['first/dir', 'other/dir']);
+$result->setExcludedPaths(['first/dir', 'other/dir']);
 ```
 
 `scan` finds all the concerned files/directories:
