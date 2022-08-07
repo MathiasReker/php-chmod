@@ -358,7 +358,6 @@ final class ScannerServiceImplTest extends TestCase
     public function testExcludedPaths(): void
     {
         $result = (new Scanner())
-            ->setNames(['*.php'])
             ->setDefaultFileMode(0644)
             ->setDefaultDirectoryMode(0755)
             ->setExcludedFileModes([])
@@ -366,7 +365,27 @@ final class ScannerServiceImplTest extends TestCase
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/baz/777.php'), $result, true));
+        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/baz/755.php'), $result, true));
+    }
+
+    public function testOnlyFindFiles(): void
+    {
+        $result = (new Scanner())
+            ->setDefaultFileMode(0644)
+            ->scan([self::ROOT])
+            ->dryRun();
+
+        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/bar'), $result, true));
+    }
+
+    public function testOnlyFindDirectories(): void
+    {
+        $result = (new Scanner())
+            ->setDefaultDirectoryMode(0755)
+            ->scan([self::ROOT])
+            ->dryRun();
+
+        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/bar/755.php'), $result, true));
     }
 
     public function testEmptyFileAndDirectoryModes(): void
