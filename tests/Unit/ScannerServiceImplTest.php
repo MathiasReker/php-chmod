@@ -21,7 +21,7 @@ use RecursiveIteratorIterator;
 /**
  * @internal
  *
- * @covers \MathiasReker\PhpChmod\Service\ScannerService
+ * @covers \ScannerService
  *
  * @small
  */
@@ -398,10 +398,7 @@ final class ScannerServiceImplTest extends TestCase
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertSame(
-            $result,
-            []
-        );
+        self::assertSame($result, []);
     }
 
     private function getMode(string $file): int

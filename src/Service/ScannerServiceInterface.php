@@ -30,49 +30,35 @@ interface ScannerServiceInterface
     /**
      * Set default directory permission.
      */
-    public function setDefaultDirectoryMode(
-        int $defaultDirectoryMode
-    );
+    public function setDefaultDirectoryMode(int $defaultDirectoryMode);
 
     /**
      * Exclude a collection of file with specific permissions from the check.
      */
-    public function setExcludedFileModes(
-        array $excludedFileModes
-    );
+    public function setExcludedFileModes(array $excludedFileModes);
 
     /**
      * Exclude a collection of directories with specific permissions from the check.
      */
-    public function setExcludedDirectoryModes(
-        array $excludedDirectoryModes
-    );
+    public function setExcludedDirectoryModes(array $excludedDirectoryModes);
 
     /**
      * Exclude a collection of names from the check. Glob and RegEx are supported.
      */
-    public function setExcludeNames(
-        array $excludedNames
-    );
+    public function setExcludeNames(array $excludedNames);
 
     /**
      * Set a collection of allowed names. Glob and RegEx are supported.
      */
-    public function setNames(
-        array $names
-    );
+    public function setNames(array $names);
 
     /**
      * Exclude a collection of paths from the check. Must be relative to the scan root.
      */
-    public function setExcludedPaths(
-        array $excludedPaths
-    );
+    public function setExcludedPaths(array $excludedPaths);
 
     /**
      * Set paths manually. This is an alternative to the scanner.
      */
-    public function setPaths(
-        array $paths
-    );
+    public function setPaths(array $paths);
 }
