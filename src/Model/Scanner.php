@@ -166,6 +166,9 @@ final class Scanner
         return $this->names;
     }
 
+    /**
+     * @param string[] $names
+     */
     public function setNames(array $names): self
     {
         $this->names = $names;

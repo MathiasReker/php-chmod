@@ -97,22 +97,22 @@ skipped:
 $result->setExcludedDirectoryModes([0750]);
 ```
 
-`setExcludedNames` excludes a list of file/directory names (not paths):
+`setExcludedNames` exclude files by a custom pattern. Glob and RegEx are supported:
 
 ```php
 $result->setExcludedNames(['*.rb', '*.py']);
+```
+
+`setNames` includes files by a custom pattern and exclude any other files. Glob and RegEx are supported:
+
+```php
+$result->setNames(['*.php']);
 ```
 
 `getExcludedPaths` excludes a list of file/directory paths:
 
 ```php
 $result->getExcludedPaths(['first/dir', 'other/dir']);
-```
-
-`setNames` is useful if you only want to scan for files having a specific pattern:
-
-```php
-$result->setNames(['*.php']);
 ```
 
 `scan` finds all the concerned files/directories:
@@ -133,7 +133,7 @@ $result->setConcernedPaths($paths);
 $result->dryRun();
 ```
 
-`fix` changes the concerned file/directory permissions to the default mode:
+`fix` changes the concerned file/directory permissions to the default permission:
 
 ```php
 $result->fix();

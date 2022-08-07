@@ -366,7 +366,7 @@ final class ScannerServiceImplTest extends TestCase
             ->dryRun();
 
         $result = array_map(static fn ($x) => realpath($x), $result);
-var_dump($result);
+
         self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/baz/755.php'), $result, true));
     }
 
