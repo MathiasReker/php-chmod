@@ -355,6 +355,20 @@ final class ScannerServiceImplTest extends TestCase
         self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/foo/test.sh'), $result, true));
     }
 
+    public function testExcludedPaths(): void
+    {
+        $result = (new Scanner())
+            ->setNames(['*.php'])
+            ->setDefaultFileMode(0644)
+            ->setDefaultDirectoryMode(0755)
+            ->setExcludedFileModes([])
+            ->setExcludedPaths([__DIR__ . '/tmp/baz'])
+            ->scan([self::ROOT])
+            ->dryRun();
+
+        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/baz/777.php'), $result, true));
+    }
+
     public function testEmptyFileAndDirectoryModes(): void
     {
         $result = (new Scanner())
