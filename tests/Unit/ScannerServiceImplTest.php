@@ -324,10 +324,7 @@ final class ScannerServiceImplTest extends TestCase
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertSame(
-            $result,
-            []
-        );
+        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/foo/444.php'), $result, true));
     }
 
     public function testExcludedShellFilesButIncludedEverythingElse(): void
