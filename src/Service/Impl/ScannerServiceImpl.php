@@ -15,7 +15,7 @@ use MathiasReker\PhpChmod\Service\ScannerService;
 use MathiasReker\PhpChmod\Util\OperatingSystem;
 use Symfony\Component\Finder\Finder;
 
-final class ScannerServiceImpl implements ScannerService
+class ScannerServiceImpl implements ScannerService
 {
     private Scanner $scanner;
 
