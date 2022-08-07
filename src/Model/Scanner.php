@@ -38,7 +38,7 @@ final class Scanner
     /**
      * @var string[]
      */
-    private array $concernedPaths = [];
+    private array $paths = [];
 
     /**
      * @var string[]
@@ -135,17 +135,17 @@ final class Scanner
     /**
      * @return string[]
      */
-    public function getConcernedPaths(): array
+    public function getPaths(): array
     {
-        return $this->concernedPaths;
+        return $this->paths;
     }
 
     /**
-     * @param string[] $concernedPaths
+     * @param string[] $paths
      */
-    public function addConcernedPaths(array $concernedPaths): self
+    public function paths(array $paths): self
     {
-        $this->concernedPaths += $concernedPaths;
+        $this->paths += $paths;
 
         return $this;
     }

@@ -72,7 +72,7 @@ interface ScannerServiceInterface
     /**
      * Set paths manually. This is an alternative to the scanner.
      */
-    public function setConcernedPaths(
-        array $concernedPaths
+    public function setPaths(
+        array $paths
     );
 }

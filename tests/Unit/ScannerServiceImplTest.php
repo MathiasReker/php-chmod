@@ -304,7 +304,7 @@ final class ScannerServiceImplTest extends TestCase
             ->setDefaultDirectoryMode(0755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
-            ->setConcernedPaths([__DIR__ . '/tmp/foo'])
+            ->setPaths([__DIR__ . '/tmp/foo'])
             ->dryRun();
 
         self::assertSame(
