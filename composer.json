@@ -19,7 +19,7 @@
   "require": {
     "php": ">=7.4.0",
     "ext-mbstring": "*",
-    "symfony/finder": "^6.1"
+    "symfony/finder": "^5.4"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "^2.28",
