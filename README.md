@@ -57,15 +57,13 @@ use MathiasReker\PhpChmod\Scanner;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$result = (new Scanner())
+(new Scanner())
     ->setDefaultFileMode(0644)
     ->setDefaultDirectoryMode(0755)
     ->setExcludedFileModes([0400, 0444, 0640])
     ->setExcludedDirectoryModes([0750])
     ->scan([__DIR__])
     ->fix();
-
-var_dump($result); // bool
 ```
 
 ### Documentation
@@ -102,7 +100,13 @@ $result->setExcludedDirectoryModes([0750]);
 `setExcludedNames` excludes a list of file/directory names (not paths):
 
 ```php
-$result->setExcludedNames(['.docker']);
+$result->setExcludedNames(['*.rb', '*.py']);
+```
+
+`getExcludedPaths` excludes a list of file/directory paths:
+
+```php
+$result->getExcludedPaths(['first/dir', 'other/dir']);
 ```
 
 `scan` finds all the concerned files/directories:

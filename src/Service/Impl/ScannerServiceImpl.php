@@ -13,9 +13,9 @@ namespace MathiasReker\PhpChmod\Service\Impl;
 use MathiasReker\PhpChmod\Model\Scanner;
 use MathiasReker\PhpChmod\Service\ScannerService;
 use MathiasReker\PhpChmod\Util\OperatingSystem;
-use RecursiveIteratorIterator;
+use Symfony\Component\Finder\Finder;
 
-class ScannerServiceImpl implements ScannerService
+final class ScannerServiceImpl implements ScannerService
 {
     private Scanner $scanner;
 
@@ -76,8 +76,9 @@ class ScannerServiceImpl implements ScannerService
     /**
      * @param int[] $excludedFileModes
      */
-    public function setExcludedFileModes(array $excludedFileModes): self
-    {
+    public function setExcludedFileModes(
+        array $excludedFileModes
+    ): self {
         $this->scanner->setExcludedFileModes($excludedFileModes);
 
         return $this;
@@ -94,22 +95,47 @@ class ScannerServiceImpl implements ScannerService
         return $this;
     }
 
+    public function setExcludedPaths(array $setExcludedPaths): self
+    {
+        $this->scanner->setExcludedPaths($setExcludedPaths);
+
+        return $this;
+    }
+
     public function scan(array $directories): self
     {
         if (OperatingSystem::isWindows()) {
             return $this;
         }
 
-        foreach ($directories as $directory) {
-            if (is_dir($directory)) {
-                $paths = (new IteratorServiceImpl())
-                    ->setDirectory($directory)
-                    ->setExcludedNames($this->scanner->getExcludedNames())
-                    ->getPaths();
-
-                $this->checkMode($paths);
-            }
+        if (null === $this->scanner->getDefaultDirectoryModes() && null === $this->scanner->getDefaultFileModes()) {
+            return $this;
         }
+
+        $finder = new Finder();
+
+        $finder->ignoreUnreadableDirs();
+
+        $finder->in($directories);
+
+        if (null === $this->scanner->getDefaultDirectoryModes()) {
+            $finder->files();
+        } elseif (null === $this->scanner->getDefaultFileModes()) {
+            $finder->directories();
+        }
+
+        if ([] !== $this->scanner->getExcludedNames()) {
+            $finder->notName($this->scanner->getExcludedNames());
+        }
+
+        if ([] !== $this->scanner->getExcludedPaths()) {
+            $finder->notPath($this->scanner->getExcludedPaths());
+        }
+
+        $finder->ignoreVCS(true);
+
+        $this->checkModes($finder);
+        // TODO: relative / absolut path
 
         return $this;
     }
@@ -121,32 +147,22 @@ class ScannerServiceImpl implements ScannerService
         return $this;
     }
 
-    private function checkMode(RecursiveIteratorIterator $paths): void
+    private function checkModes(Finder $finder): void
     {
         $result = [];
 
-        foreach ($paths as $path) {
-            $currentMode = $path->getPerms() & 0777;
+        foreach ($finder as $singleFinder) {
+            $currentMode = $singleFinder->getPerms() & 0777;
 
-            if ($path->isDir()) {
-                if (null === $this->scanner->getDefaultDirectoryModes()) {
-                    continue;
-                }
-
+            if ($singleFinder->isDir()) {
                 if (\in_array($currentMode, $this->scanner->getExcludedDirectoryModes(), true)) {
                     continue;
                 }
-            } else {
-                if (null === $this->scanner->getDefaultFileModes()) {
-                    continue;
-                }
-
-                if (\in_array($currentMode, $this->scanner->getExcludedFileModes(), true)) {
-                    continue;
-                }
+            } elseif (\in_array($currentMode, $this->scanner->getExcludedFileModes(), true)) {
+                continue;
             }
 
-            $result[] = $path->getRealPath();
+            $result[] = $singleFinder->getRealPath();
         }
 
         $this->scanner->addConcernedPaths($result);

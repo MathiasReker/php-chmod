@@ -12,9 +12,9 @@ namespace MathiasReker\PhpChmod\Service;
 
 interface ScannerService
 {
-    public function dryRun();
+    public function dryRun(): array;
 
-    public function fix();
+    public function fix(): void;
 
     public function setDefaultFileMode(int $defaultFileMode);
 
@@ -25,6 +25,8 @@ interface ScannerService
     public function setExcludedDirectoryModes(array $excludedDirectoryModes);
 
     public function setExcludeNames(array $setExcludedNames);
+
+    public function setExcludedPaths(array $excludedPaths);
 
     public function setConcernedPaths(array $concernedPaths);
 }
