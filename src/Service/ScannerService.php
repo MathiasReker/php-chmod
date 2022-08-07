@@ -42,10 +42,6 @@ class ScannerService implements ScannerServiceInterface
     {
         $concernedPaths = $this->scanner->getConcernedPaths();
 
-        if (empty($concernedPaths)) {
-            return;
-        }
-
         foreach ($concernedPaths as $concernedPath) {
             clearstatcache();
 
