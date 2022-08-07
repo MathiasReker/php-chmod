@@ -19,11 +19,6 @@ final class Scanner
      */
     private const INVALID_PERMISSION = 'Invalid permission.';
 
-    /**
-     * @var mixed[]
-     */
-    private const NAMES = [];
-
     private ?int $defaultFileModes = null;
 
     private ?int $defaultDirectoryModes = null;
@@ -49,6 +44,11 @@ final class Scanner
      * @var string[]
      */
     private array $excludedNames = [];
+
+    /**
+     * @var string[]
+     */
+    private array $names = [];
 
     public function setDefaultFileMode(int $defaultFileModes): self
     {
@@ -159,16 +159,16 @@ final class Scanner
     }
 
     /**
-     * @return mixed[]
+     * @return string[]
      */
     public function getNames(): array
     {
-        return self::NAMES;
+        return $this->names;
     }
 
     public function setNames(array $names): self
     {
-        $this->setNames($names);
+        $this->names = $names;
 
         return $this;
     }
