@@ -163,11 +163,13 @@ class ScannerService implements ScannerServiceInterface
         foreach ($finder as $singleFinder) {
             $currentMode = $singleFinder->getPerms() & 0777;
 
-            if ($singleFinder->isDir()) {
-                if (\in_array($currentMode, $this->scanner->getExcludedDirectoryModes(), true)) {
-                    continue;
-                }
-            } elseif (\in_array($currentMode, $this->scanner->getExcludedFileModes(), true)) {
+            if (
+                \in_array(
+                    $currentMode,
+                    $singleFinder->isDir() ? $this->scanner->getExcludedDirectoryModes() : $this->scanner->getExcludedFileModes(),
+                    true
+                )
+            ) {
                 continue;
             }
 
