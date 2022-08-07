@@ -121,19 +121,20 @@ $result->setExcludedPaths(['first/dir', 'other/dir']);
 $result->scan([__DIR__]);
 ```
 
-`setConcernedPaths` sets concerned files manually. This is useful if you want to use a custom scanner:
+`setPaths` sets paths of files/directories manually. This is an alternative to the scanner if you want to use a custom
+scanner:
 
 ```php
-$result->setConcernedPaths($paths);
+$result->setPaths($paths);
 ```
 
-`dryRun` returns an array of concerned files/directories:
+`dryRun` returns an array of the concerned files/directories:
 
 ```php
 $result->dryRun();
 ```
 
-`fix` changes the concerned file/directory permissions to the default permission:
+`fix` changes the concerned files/directories permissions to the default permission:
 
 ```php
 $result->fix();

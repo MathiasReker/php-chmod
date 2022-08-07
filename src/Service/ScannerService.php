@@ -35,19 +35,19 @@ class ScannerService implements ScannerServiceInterface
      */
     public function dryRun(): array
     {
-        return $this->scanner->getConcernedPaths();
+        return $this->scanner->getPaths();
     }
 
     public function fix(): void
     {
-        $concernedPaths = $this->scanner->getConcernedPaths();
+        $paths = $this->scanner->getPaths();
 
-        foreach ($concernedPaths as $concernedPath) {
+        foreach ($paths as $path) {
             clearstatcache();
 
             chmod(
-                $concernedPath,
-                is_dir($concernedPath)
+                $path,
+                is_dir($path)
                     ? $this->scanner->getDefaultDirectoryModes()
                     : $this->scanner->getDefaultFileModes()
             );
@@ -138,9 +138,9 @@ class ScannerService implements ScannerServiceInterface
         return $this;
     }
 
-    public function setConcernedPaths(array $concernedPaths): self
+    public function setPaths(array $paths): self
     {
-        $this->scanner->addConcernedPaths($concernedPaths);
+        $this->scanner->paths($paths);
 
         return $this;
     }
@@ -152,26 +152,28 @@ class ScannerService implements ScannerServiceInterface
         return $this;
     }
 
-    private function checkModes(Finder $finder): void
+    private function checkModes(Finder $paths): void
     {
         $result = [];
 
-        foreach ($finder as $singleFinder) {
-            $currentMode = $singleFinder->getPerms() & 0777;
+        foreach ($paths as $path) {
+            $currentMode = $path->getPerms() & 0777;
 
             if (
                 \in_array(
                     $currentMode,
-                    $singleFinder->isDir() ? $this->scanner->getExcludedDirectoryModes() : $this->scanner->getExcludedFileModes(),
+                    $path->isDir()
+                        ? $this->scanner->getExcludedDirectoryModes()
+                        : $this->scanner->getExcludedFileModes(),
                     true
                 )
             ) {
                 continue;
             }
 
-            $result[] = $singleFinder->getRealPath();
+            $result[] = $path->getRealPath();
         }
 
-        $this->scanner->addConcernedPaths($result);
+        $this->scanner->paths($result);
     }
 }
