@@ -24,7 +24,7 @@
 
 ### Installation
 
-Run `composer require MathiasReker/php-chmod`
+Run `composer require mathiasreker/php-chmod`
 
 ### Examples
 
