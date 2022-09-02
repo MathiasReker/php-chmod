@@ -15,7 +15,7 @@
 
 | Version | PHP  | Documentation |
 |---------|------|---------------|
-| ^1.1    | ^7.4 | current       |
+| ^2.0    | ^7.4 | current       |
 
 ### Requirements
 
@@ -63,7 +63,7 @@ require __DIR__ . '/vendor/autoload.php';
     ->setExcludedFileModes([0400, 0444, 0640])
     ->setExcludedDirectoryModes([0750])
     ->scan([__DIR__])
-    ->fix();
+    ->fix(); // void
 ```
 
 ### Documentation
@@ -128,6 +128,18 @@ scanner:
 $result->setPaths($paths);
 ```
 
+`doExcludeFiles` excludes all files:
+
+```php
+$result->doExcludeFiles();
+```
+
+`doExcludeDirectories` excludes all directories:
+
+```php
+$result->doExcludeDirectories();
+```
+
 `dryRun` returns an array of the concerned files/directories:
 
 ```php
@@ -150,6 +162,40 @@ issues).
 
 If you have a suggestion to improve this, please fork the repo and create a pull request. You can also open an issue
 with the tag "enhancement". Finally, don't forget to give the project a star! Thanks again!
+
+#### Docker
+
+If you are using docker, you can use the following command to get started:
+
+```bash
+docker-compose up --build -d
+```
+
+Next, access the container:
+
+```bash
+docker exec -it php-chmod bash
+```
+
+#### Tools
+
+PHP Coding Standards Fixer:
+
+```bash
+composer run-script php-cs-fixer
+```
+
+PHP Stan:
+
+```
+composer run-script phpstan
+```
+
+Unit tests:
+
+```bash
+composer run-script test
+```
 
 ### License
 

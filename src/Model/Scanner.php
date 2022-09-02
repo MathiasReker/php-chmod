@@ -19,11 +19,18 @@ final class Scanner
      */
     private const INVALID_PERMISSION = 'Invalid permission.';
 
-    private ?int $defaultFileModes = null;
+    private int $defaultFileMode = 0644;
 
-    private ?int $defaultDirectoryModes = null;
+    private int $defaultDirectoryMode = 0755;
 
-    private array $getExcludedPaths = [];
+    private bool $isExcludedFiles = false;
+
+    private bool $isExcludedDirectories = false;
+
+    /**
+     * @var string[]
+     */
+    private array $excludedPaths = [];
 
     /**
      * @var int[]
@@ -50,29 +57,9 @@ final class Scanner
      */
     private array $names = [];
 
-    public function setDefaultFileMode(int $defaultFileModes): self
-    {
-        if (!$this->isValidMode($defaultFileModes)) {
-            throw new InvalidArgumentException(self::INVALID_PERMISSION);
-        }
-
-        $this->defaultFileModes = $defaultFileModes;
-
-        return $this;
-    }
-
-    public function setDefaultDirectoryMode(int $defaultDirectoryModes): self
-    {
-        if (!$this->isValidMode($defaultDirectoryModes)) {
-            throw new InvalidArgumentException(self::INVALID_PERMISSION);
-        }
-
-        $this->defaultDirectoryModes = $defaultDirectoryModes;
-
-        return $this;
-    }
-
     /**
+     * Get excluded permissions for files.
+     *
      * @return int[]
      */
     public function getExcludedFileModes(): array
@@ -81,21 +68,12 @@ final class Scanner
     }
 
     /**
-     * @param string[] $getExcludedPaths
-     */
-    public function setExcludedPaths(array $getExcludedPaths): self
-    {
-        $this->getExcludedPaths = $getExcludedPaths;
-
-        return $this;
-    }
-
-    /**
+     * Set excluded permissions for files.
+     *
      * @param int[] $excludedFileModes
      */
-    public function setExcludedFileModes(
-        array $excludedFileModes
-    ): self {
+    public function setExcludedFileModes(array $excludedFileModes): self
+    {
         foreach ($excludedFileModes as $excludedFileMode) {
             if (!$this->isValidMode($excludedFileMode)) {
                 throw new InvalidArgumentException(self::INVALID_PERMISSION);
@@ -108,6 +86,16 @@ final class Scanner
     }
 
     /**
+     * Check if the permission mode is valid.
+     */
+    private function isValidMode(int $mode): bool
+    {
+        return \in_array(mb_strlen(decoct($mode)), [3, 4], true);
+    }
+
+    /**
+     * Get excluded permissions for directories.
+     *
      * @return int[]
      */
     public function getExcludedDirectoryModes(): array
@@ -116,11 +104,12 @@ final class Scanner
     }
 
     /**
+     * Set excluded permissions for directories.
+     *
      * @param int[] $excludedDirectoryModes
      */
-    public function setExcludedDirectoryModes(
-        array $excludedDirectoryModes
-    ): self {
+    public function setExcludedDirectoryModes(array $excludedDirectoryModes): self
+    {
         foreach ($excludedDirectoryModes as $excludedDirectoryMode) {
             if (!$this->isValidMode($excludedDirectoryMode)) {
                 throw new InvalidArgumentException(self::INVALID_PERMISSION);
@@ -133,6 +122,8 @@ final class Scanner
     }
 
     /**
+     * Get paths matching the search pattern.
+     *
      * @return string[]
      */
     public function getPaths(): array
@@ -141,9 +132,11 @@ final class Scanner
     }
 
     /**
+     * Set paths.
+     *
      * @param string[] $paths
      */
-    public function paths(array $paths): self
+    public function setPaths(array $paths): self
     {
         $this->paths += $paths;
 
@@ -151,6 +144,8 @@ final class Scanner
     }
 
     /**
+     * Get names that directories/files must not match.
+     *
      * @return string[]
      */
     public function getExcludedNames(): array
@@ -159,6 +154,8 @@ final class Scanner
     }
 
     /**
+     * Get names that directories/files must match.
+     *
      * @return string[]
      */
     public function getNames(): array
@@ -167,6 +164,8 @@ final class Scanner
     }
 
     /**
+     * Set names the directories/files must match.
+     *
      * @param string[] $names
      */
     public function setNames(array $names): self
@@ -177,14 +176,30 @@ final class Scanner
     }
 
     /**
+     * Get paths that directories/files must not match.
+     *
      * @return string[]
      */
     public function getExcludedPaths(): array
     {
-        return $this->getExcludedPaths;
+        return $this->excludedPaths;
     }
 
     /**
+     * Set excluded paths.
+     *
+     * @param string[] $excludedPaths
+     */
+    public function setExcludedPaths(array $excludedPaths): self
+    {
+        $this->excludedPaths = $excludedPaths;
+
+        return $this;
+    }
+
+    /**
+     * Set names that directories/files must match.
+     *
      * @param string[] $excludedNames
      */
     public function setExcludeNames(array $excludedNames): self
@@ -194,18 +209,83 @@ final class Scanner
         return $this;
     }
 
-    public function getDefaultFileModes(): ?int
+    /**
+     * Get names that directories/files must not match.
+     */
+    public function getDefaultFileMode(): int
     {
-        return $this->defaultFileModes;
+        return $this->defaultFileMode;
     }
 
-    public function getDefaultDirectoryModes(): ?int
+    /**
+     * Set the default permission for files.
+     */
+    public function setDefaultFileMode(int $defaultFileMode): self
     {
-        return $this->defaultDirectoryModes;
+        if (!$this->isValidMode($defaultFileMode)) {
+            throw new InvalidArgumentException(self::INVALID_PERMISSION);
+        }
+
+        $this->defaultFileMode = $defaultFileMode;
+
+        return $this;
     }
 
-    private function isValidMode(int $mode): bool
+    /**
+     * Get default directories mode.
+     */
+    public function getDefaultDirectoryMode(): int
     {
-        return \in_array(mb_strlen(decoct($mode)), [3, 4], true);
+        return $this->defaultDirectoryMode;
+    }
+
+    /**
+     * Set the default permission for directories.
+     */
+    public function setDefaultDirectoryMode(int $defaultDirectoryMode): self
+    {
+        if (!$this->isValidMode($defaultDirectoryMode)) {
+            throw new InvalidArgumentException(self::INVALID_PERMISSION);
+        }
+
+        $this->defaultDirectoryMode = $defaultDirectoryMode;
+
+        return $this;
+    }
+
+    /**
+     * Do exclude all directories.
+     */
+    public function doExcludeDirectories(bool $isExcludedDirectories = false): self
+    {
+        $this->isExcludedDirectories = $isExcludedDirectories;
+
+        return $this;
+    }
+
+    /**
+     * Do exclude all directories.
+     */
+    public function doExcludeFiles(bool $isExcludedFiles = false): self
+    {
+        $this->isExcludedFiles = $isExcludedFiles;
+
+        return $this;
+    }
+
+    /**
+     * Is excluded files.
+     */
+    public function isExcludedFiles(): bool
+    {
+        return $this->isExcludedFiles;
+    }
+
+    /**
+     * Is excluded directories.
+     */
+    public function isExcludedDirectories(): bool
+    {
+        return $this->isExcludedDirectories;
     }
 }

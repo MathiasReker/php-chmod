@@ -13,52 +13,83 @@ namespace MathiasReker\PhpChmod\Service;
 interface ScannerServiceInterface
 {
     /**
-     * Returns a collection of concerned files.
+     * Returns a collection of concerned directories/files.
+     *
+     * @return string[]
      */
     public function dryRun(): array;
 
     /**
-     * Fix concerned files.
+     * Fix concerned directories/files.
      */
     public function fix(): void;
 
     /**
+     * Build the list of concerned directories/files.
+     *
+     * @param string[] $directories
+     */
+    public function scan(array $directories): self;
+
+    /**
      * Set default file permission.
      */
-    public function setDefaultFileMode(int $defaultFileMode);
+    public function setDefaultFileMode(int $defaultFileMode): self;
 
     /**
      * Set default directory permission.
      */
-    public function setDefaultDirectoryMode(int $defaultDirectoryMode);
+    public function setDefaultDirectoryMode(int $defaultDirectoryMode): self;
 
     /**
-     * Exclude a collection of file with specific permissions from the check.
+     * Set excluded permissions for files.
+     *
+     * @param int[] $excludedFileModes
      */
-    public function setExcludedFileModes(array $excludedFileModes);
+    public function setExcludedFileModes(array $excludedFileModes): self;
 
     /**
-     * Exclude a collection of directories with specific permissions from the check.
+     * Set excluded permissions for directories.
+     *
+     * @param int[] $excludedDirectoryModes
      */
-    public function setExcludedDirectoryModes(array $excludedDirectoryModes);
+    public function setExcludedDirectoryModes(array $excludedDirectoryModes): self;
 
     /**
-     * Exclude a collection of names from the check. Glob and RegEx are supported.
+     * Set names that directories/files must match.
+     *
+     * @param string[] $excludedNames
      */
-    public function setExcludeNames(array $excludedNames);
+    public function setExcludeNames(array $excludedNames): self;
 
     /**
-     * Set a collection of allowed names. Glob and RegEx are supported.
+     * Set names the directories/files must match.
+     *
+     * @param string[] $names
      */
-    public function setNames(array $names);
+    public function setNames(array $names): self;
 
     /**
-     * Exclude a collection of paths from the check. Must be relative to the scan root.
+     * Set excluded paths.
+     *
+     * @param string[] $excludedPaths
      */
-    public function setExcludedPaths(array $excludedPaths);
+    public function setExcludedPaths(array $excludedPaths): self;
 
     /**
      * Set paths manually. This is an alternative to the scanner.
+     *
+     * @param string[] $paths
      */
-    public function setPaths(array $paths);
+    public function setPaths(array $paths): self;
+
+    /**
+     * Ignore all directories.
+     */
+    public function doIgnoreDirectories(bool $ignoredDirectories): self;
+
+    /**
+     * Ignore all files.
+     */
+    public function doIgnoreFiles(bool $ignoredFiles): self;
 }

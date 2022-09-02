@@ -30,7 +30,7 @@ final class FileSystemCache
 
             mkdir($this->directory, $this->directoryMode, true);
 
-            chmod($this->directory, $this->directoryMode); // this line is needed
+            chmod($this->directory, $this->directoryMode); // the chmod must be forced
         }
 
         $file = $this->directory . '/' . $fileName;

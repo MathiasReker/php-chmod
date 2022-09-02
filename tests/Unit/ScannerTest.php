@@ -25,7 +25,7 @@ use RecursiveIteratorIterator;
  *
  * @small
  */
-final class ScannerServiceImplTest extends TestCase
+final class ScannerTest extends TestCase
 {
     /**
      * @var array<string, int>
@@ -56,37 +56,6 @@ final class ScannerServiceImplTest extends TestCase
      */
     private const ROOT = __DIR__ . '/tmp';
 
-    protected function setUp(): void
-    {
-        if (OperatingSystem::isWindows()) {
-            self::markTestSkipped('Tests in this class are skipped for Windows.');
-        }
-
-        foreach (self::DIRECTORY_MODES as $directory => $directoryMode) {
-            foreach (self::FILE_MODES as $file => $fileMode) {
-                (new FileSystemCache(self::ROOT . '/' . $directory, $directoryMode))
-                    ->store($file, $fileMode);
-            }
-        }
-    }
-
-    protected function tearDown(): void
-    {
-        $paths = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(self::ROOT, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST);
-
-        foreach ($paths as $path) {
-            if ($path->isDir()) {
-                rmdir($path->getRealPath());
-            } else {
-                unlink($path->getRealPath());
-            }
-        }
-
-        rmdir(self::ROOT);
-    }
-
     public function testFileModeIsNotChangedIfExcludedFileModes(): void
     {
         (new Scanner())
@@ -98,6 +67,11 @@ final class ScannerServiceImplTest extends TestCase
             ->fix();
 
         self::assertSame(0400, $this->getMode(self::ROOT . '/foo/400.php'));
+    }
+
+    private function getMode(string $file): int
+    {
+        return fileperms($file) & 0777;
     }
 
     public function testFileModeIsChangedIfNotExcludedFileModes(): void
@@ -374,35 +348,85 @@ final class ScannerServiceImplTest extends TestCase
     {
         $result = (new Scanner())
             ->setDefaultFileMode(0644)
+            ->doIgnoreDirectories()
             ->scan([self::ROOT])
             ->dryRun();
 
         self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/bar'), $result, true));
     }
 
+    public function testNotOnlyFindFiles(): void
+    {
+        $result = (new Scanner())
+            ->setDefaultFileMode(0644)
+            ->doIgnoreDirectories(false)
+            ->scan([self::ROOT])
+            ->dryRun();
+
+        self::assertTrue([] !== $result && \in_array(realpath(__DIR__ . '/tmp/bar'), $result, true));
+    }
+
     public function testOnlyFindDirectories(): void
     {
         $result = (new Scanner())
             ->setDefaultDirectoryMode(0755)
+            ->doIgnoreFiles()
             ->scan([self::ROOT])
             ->dryRun();
 
         self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/bar/755.php'), $result, true));
     }
 
+    public function testNotOnlyFindDirectories(): void
+    {
+        $result = (new Scanner())
+            ->setDefaultDirectoryMode(0755)
+            ->doIgnoreFiles(false)
+            ->scan([self::ROOT])
+            ->dryRun();
+
+        self::assertTrue([] !== $result && \in_array(realpath(__DIR__ . '/tmp/bar/755.php'), $result, true));
+    }
+
     public function testEmptyFileAndDirectoryModes(): void
     {
         $result = (new Scanner())
-            ->setExcludedFileModes([])
-            ->setExcludedDirectoryModes([])
+            ->doIgnoreDirectories()
+            ->doIgnoreFiles()
             ->scan([self::ROOT])
             ->dryRun();
 
         self::assertSame($result, []);
     }
 
-    private function getMode(string $file): int
+    protected function setUp(): void
     {
-        return fileperms($file) & 0777;
+        if (OperatingSystem::isWindows()) {
+            self::markTestSkipped('Tests in this class are skipped for Windows.');
+        }
+
+        foreach (self::DIRECTORY_MODES as $directory => $directoryMode) {
+            foreach (self::FILE_MODES as $file => $fileMode) {
+                (new FileSystemCache(self::ROOT . '/' . $directory, $directoryMode))
+                    ->store($file, $fileMode);
+            }
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        $paths = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(self::ROOT, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach ($paths as $path) {
+            if ($path->isDir()) {
+                rmdir($path->getRealPath());
+            } else {
+                unlink($path->getRealPath());
+            }
+        }
+
+        rmdir(self::ROOT);
     }
 }

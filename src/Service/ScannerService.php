@@ -18,12 +18,21 @@ class ScannerService implements ScannerServiceInterface
 {
     private Scanner $scanner;
 
+    private Finder $finder;
+
     public function __construct()
     {
         $this->scanner = new Scanner();
+
+        $this->finder = new Finder();
     }
 
-    public function setExcludeNames($excludedNames): self
+    /**
+     * {@inheritDoc}
+     *
+     * @param string[] $excludedNames
+     */
+    public function setExcludeNames(array $excludedNames): self
     {
         $this->scanner->setExcludeNames($excludedNames);
 
@@ -31,6 +40,8 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @return string[]
      */
     public function dryRun(): array
@@ -38,6 +49,9 @@ class ScannerService implements ScannerServiceInterface
         return $this->scanner->getPaths();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function fix(): void
     {
         $paths = $this->scanner->getPaths();
@@ -48,12 +62,15 @@ class ScannerService implements ScannerServiceInterface
             chmod(
                 $path,
                 is_dir($path)
-                    ? $this->scanner->getDefaultDirectoryModes()
-                    : $this->scanner->getDefaultFileModes()
+                    ? $this->scanner->getDefaultDirectoryMode()
+                    : $this->scanner->getDefaultFileMode()
             );
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setDefaultDirectoryMode(int $defaultDirectoryMode): self
     {
         $this->scanner->setDefaultDirectoryMode($defaultDirectoryMode);
@@ -61,6 +78,9 @@ class ScannerService implements ScannerServiceInterface
         return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setDefaultFileMode(int $defaultFileMode): self
     {
         $this->scanner->setDefaultFileMode($defaultFileMode);
@@ -69,11 +89,12 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param int[] $excludedFileModes
      */
-    public function setExcludedFileModes(
-        array $excludedFileModes
-    ): self {
+    public function setExcludedFileModes(array $excludedFileModes): self
+    {
         $this->scanner->setExcludedFileModes($excludedFileModes);
 
         return $this;
@@ -82,14 +103,18 @@ class ScannerService implements ScannerServiceInterface
     /**
      * @param int[] $excludedDirectoryModes
      */
-    public function setExcludedDirectoryModes(
-        array $excludedDirectoryModes
-    ): self {
+    public function setExcludedDirectoryModes(array $excludedDirectoryModes): self
+    {
         $this->scanner->setExcludedDirectoryModes($excludedDirectoryModes);
 
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param string[] $excludedPaths
+     */
     public function setExcludedPaths(array $excludedPaths): self
     {
         $this->scanner->setExcludedPaths($excludedPaths);
@@ -97,62 +122,74 @@ class ScannerService implements ScannerServiceInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function doIgnoreDirectories(bool $ignoredDirectories = true): self
+    {
+        $this->scanner->doExcludeDirectories($ignoredDirectories);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function doIgnoreFiles(bool $ignoredFiles = true): self
+    {
+        $this->scanner->doExcludeFiles($ignoredFiles);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param string[] $directories
+     */
     public function scan(array $directories): self
     {
         if (OperatingSystem::isWindows()) {
             return $this;
         }
 
-        if (null === $this->scanner->getDefaultDirectoryModes() && null === $this->scanner->getDefaultFileModes()) {
+        if ($this->scanner->isExcludedDirectories() && $this->scanner->isExcludedFiles()) {
             return $this;
         }
 
-        $finder = new Finder();
+        $this->finder->ignoreUnreadableDirs();
 
-        $finder->ignoreUnreadableDirs();
+        $this->finder->in($directories);
 
-        $finder->in($directories);
-
-        if (null === $this->scanner->getDefaultDirectoryModes()) {
-            $finder->files();
-        } elseif (null === $this->scanner->getDefaultFileModes()) {
-            $finder->directories();
+        if ($this->scanner->isExcludedDirectories()) {
+            $this->finder->files();
+        } elseif ($this->scanner->isExcludedFiles()) {
+            $this->finder->directories();
         }
 
         if ([] !== $this->scanner->getExcludedNames()) {
-            $finder->notName($this->scanner->getExcludedNames());
+            $this->finder->notName($this->scanner->getExcludedNames());
         }
 
         if ([] !== $this->scanner->getNames()) {
-            $finder->name($this->scanner->getNames());
+            $this->finder->name($this->scanner->getNames());
         }
 
         if ([] !== $this->scanner->getExcludedPaths()) {
-            $finder->notPath($this->scanner->getExcludedPaths());
+            $this->finder->notPath($this->scanner->getExcludedPaths());
         }
 
-        $finder->ignoreVCS(true);
+        $this->finder->ignoreVCS(true);
 
-        $this->checkModes($finder);
-
-        return $this;
-    }
-
-    public function setPaths(array $paths): self
-    {
-        $this->scanner->paths($paths);
+        $this->filterPathsByMode($this->finder);
 
         return $this;
     }
 
-    public function setNames(array $names): self
-    {
-        $this->scanner->setNames($names);
-
-        return $this;
-    }
-
-    private function checkModes(Finder $paths): void
+    /**
+     * Set paths matching the configuration.
+     */
+    private function filterPathsByMode(Finder $paths): void
     {
         $result = [];
 
@@ -174,6 +211,30 @@ class ScannerService implements ScannerServiceInterface
             $result[] = $path->getRealPath();
         }
 
-        $this->scanner->paths($result);
+        $this->scanner->setPaths($result);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param string[] $paths
+     */
+    public function setPaths(array $paths): self
+    {
+        $this->scanner->setPaths($paths);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param string[] $names
+     */
+    public function setNames(array $names): self
+    {
+        $this->scanner->setNames($names);
+
+        return $this;
     }
 }
