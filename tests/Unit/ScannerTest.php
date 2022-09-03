@@ -298,7 +298,8 @@ final class ScannerTest extends TestCase
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/foo/444.php'), $result, true));
+        self::assertTrue([] !== $result
+            && !\in_array(realpath(__DIR__ . '/tmp/foo/444.php'), $result, true));
     }
 
     public function testExcludedShellFilesButIncludedEverythingElse(): void
@@ -312,7 +313,8 @@ final class ScannerTest extends TestCase
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/foo/test.sh'), $result, true));
+        self::assertTrue([] !== $result
+            && !\in_array(realpath(__DIR__ . '/tmp/foo/test.sh'), $result, true));
     }
 
     public function testIncludeOnlyPhpFiles(): void
@@ -326,7 +328,8 @@ final class ScannerTest extends TestCase
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/foo/test.sh'), $result, true));
+        self::assertTrue([] !== $result
+            && !\in_array(realpath(__DIR__ . '/tmp/foo/test.sh'), $result, true));
     }
 
     public function testExcludedPaths(): void
@@ -341,7 +344,8 @@ final class ScannerTest extends TestCase
 
         $result = array_map(static fn ($x) => realpath($x), $result);
 
-        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/baz/755.php'), $result, true));
+        self::assertTrue([] !== $result
+            && !\in_array(realpath(__DIR__ . '/tmp/baz/755.php'), $result, true));
     }
 
     public function testOnlyFindFiles(): void
@@ -352,7 +356,8 @@ final class ScannerTest extends TestCase
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/bar'), $result, true));
+        self::assertTrue([] !== $result
+            && !\in_array(realpath(__DIR__ . '/tmp/bar'), $result, true));
     }
 
     public function testNotOnlyFindFiles(): void
@@ -363,7 +368,8 @@ final class ScannerTest extends TestCase
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertTrue([] !== $result && \in_array(realpath(__DIR__ . '/tmp/bar'), $result, true));
+        self::assertTrue([] !== $result
+            && \in_array(realpath(__DIR__ . '/tmp/bar'), $result, true));
     }
 
     public function testOnlyFindDirectories(): void
@@ -374,7 +380,8 @@ final class ScannerTest extends TestCase
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertTrue([] !== $result && !\in_array(realpath(__DIR__ . '/tmp/bar/755.php'), $result, true));
+        self::assertTrue([] !== $result
+            && !\in_array(realpath(__DIR__ . '/tmp/bar/755.php'), $result, true));
     }
 
     public function testNotOnlyFindDirectories(): void
@@ -385,7 +392,8 @@ final class ScannerTest extends TestCase
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertTrue([] !== $result && \in_array(realpath(__DIR__ . '/tmp/bar/755.php'), $result, true));
+        self::assertTrue([] !== $result
+            && \in_array(realpath(__DIR__ . '/tmp/bar/755.php'), $result, true));
     }
 
     public function testEmptyFileAndDirectoryModes(): void

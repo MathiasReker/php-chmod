@@ -9,13 +9,15 @@
 [![Issues](https://img.shields.io/github/issues/MathiasReker/php-chmod.svg)](https://github.com/MathiasReker/php-chmod/issues)
 [![MIT License](https://img.shields.io/github/license/MathiasReker/php-chmod.svg)](https://github.com/MathiasReker/php-chmod/blob/develop/LICENSE.txt)
 
-`php-chmod` is a PHP library for easily changing the permissions recursively.
+`php-chmod` is a PHP library for easily changing file/directory permissions recursively.
+
+    ✅ Literal octal notation (0o) is supported
 
 ### Versions & Dependencies
 
 | Version | PHP  | Documentation |
 |---------|------|---------------|
-| ^2.0    | ^7.4 | current       |
+| ^2.1    | ^7.4 | current       |
 
 ### Requirements
 
@@ -168,7 +170,7 @@ with the tag "enhancement". Finally, don't forget to give the project a star! Th
 If you are using docker, you can use the following command to get started:
 
 ```bash
-docker-compose up --build -d
+docker-compose up -d
 ```
 
 Next, access the container:
@@ -182,12 +184,18 @@ docker exec -it php-chmod bash
 PHP Coding Standards Fixer:
 
 ```bash
-composer run-script php-cs-fixer
+composer run-script cs-fix
+```
+
+PHP Coding Standards Checker:
+
+```bash
+composer run-script cs-check
 ```
 
 PHP Stan:
 
-```
+```bash
 composer run-script phpstan
 ```
 

@@ -111,7 +111,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param string[] $excludedPaths
      */
@@ -123,7 +123,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function doIgnoreDirectories(bool $ignoredDirectories = true): self
     {
@@ -133,7 +133,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function doIgnoreFiles(bool $ignoredFiles = true): self
     {
@@ -143,7 +143,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param string[] $directories
      */
@@ -215,7 +215,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param string[] $paths
      */
@@ -227,7 +227,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @param string[] $names
      */
