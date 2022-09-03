@@ -1,6 +1,6 @@
 {
   "name": "mathiasreker/php-chmod",
-  "description": "php-chmod is a PHP library for easily changing permissions recursively.",
+  "description": "php-chmod is a PHP library for easily changing file/directory permissions recursively.",
   "license": "MIT",
   "type": "library",
   "keywords": [
@@ -45,8 +45,9 @@
     "sort-packages": true
   },
   "scripts": {
-    "php-cs-fixer": "./vendor/bin/php-cs-fixer fix .",
-    "phpstan": "./vendor/bin/phpstan analyse src --level=9",
+    "cs-check": "./vendor/bin/php-cs-fixer fix . --dry-run --diff",
+    "cs-fix": "./vendor/bin/php-cs-fixer fix .",
+    "phpstan": "./vendor/bin/phpstan analyse src/ --level=9",
     "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php --colors=always tests/"
   }
 }

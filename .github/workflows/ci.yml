@@ -40,11 +40,10 @@ jobs:
         run: composer run-script test
 
       - name: Run PHP CS fixer
-        run: composer run-script php-cs-fixer
+        run: composer run-script cs-check
 
       - name: Run phpstan
         run: composer run-script phpstan
 
       - name: Run ergebnis/composer-normalize
         run: composer normalize --dry-run --no-check-lock
-        

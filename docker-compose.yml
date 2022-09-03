@@ -3,9 +3,7 @@ version: "3"
 services:
   app:
     build: .
-    image: php-chmod:2.0
+    image: php-chmod:2.1
     container_name: "php-chmod"
-    ports:
-      - "8080:80"
     volumes:
       - ./:/app
