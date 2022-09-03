@@ -181,7 +181,7 @@ class ScannerService implements ScannerServiceInterface
 
         $this->finder->ignoreVCS(true);
 
-        $this->filterPathsByMode($this->finder);
+        $this->setFilteredPaths($this->finder);
 
         return $this;
     }
@@ -189,7 +189,7 @@ class ScannerService implements ScannerServiceInterface
     /**
      * Set paths matching the configuration.
      */
-    private function filterPathsByMode(Finder $paths): void
+    private function setFilteredPaths(Finder $paths): void
     {
         $result = [];
 
