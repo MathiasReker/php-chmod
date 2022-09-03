@@ -11,7 +11,7 @@
 
 `php-chmod` is a PHP library for easily changing file/directory permissions recursively.
 
-    ✅ Literal octal notation (0o) is supported
+> ✅ Literal octal notation (0o) is supported
 
 ### Versions & Dependencies
 
@@ -117,6 +117,18 @@ $result->setNames(['*.php']);
 $result->setExcludedPaths(['first/dir', 'other/dir']);
 ```
 
+`doExcludeFiles` excludes all files:
+
+```php
+$result->doExcludeFiles();
+```
+
+`doExcludeDirectories` excludes all directories:
+
+```php
+$result->doExcludeDirectories();
+```
+
 `scan` finds all the concerned files/directories:
 
 ```php
@@ -128,18 +140,6 @@ scanner:
 
 ```php
 $result->setPaths($paths);
-```
-
-`doExcludeFiles` excludes all files:
-
-```php
-$result->doExcludeFiles();
-```
-
-`doExcludeDirectories` excludes all directories:
-
-```php
-$result->doExcludeDirectories();
 ```
 
 `dryRun` returns an array of the concerned files/directories:
