@@ -25,10 +25,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extension-csv: mbstring, intl
+          extensions: mbstring
           coverage: xdebug
-          ini-values: post_max_size=256M, max_execution_time=180
-          pecl: false
 
       - name: Check PHP Version
         run: php -v
