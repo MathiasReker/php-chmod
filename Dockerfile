@@ -9,6 +9,7 @@ LABEL org.opencontainers.image.description="php-chmod is a PHP library for easil
 WORKDIR /app
 COPY . .
 
-RUN apt-get update && apt-get -y upgrade  \
+RUN apt-get update \
+    && apt-get -y upgrade \
     && apt-get -y install zip \
     && composer update
