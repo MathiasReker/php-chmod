@@ -10,13 +10,10 @@ declare(strict_types=1);
 
 namespace MathiasReker\PhpChmod\Tests\Unit;
 
-use FilesystemIterator;
 use MathiasReker\PhpChmod\Exception\InvalidArgumentException;
 use MathiasReker\PhpChmod\Scanner;
 use MathiasReker\PhpChmod\Util\OperatingSystem;
 use PHPUnit\Framework\TestCase;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 
 /**
  * @internal
@@ -423,9 +420,9 @@ final class ScannerTest extends TestCase
 
     protected function tearDown(): void
     {
-        $paths = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(self::ROOT, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST);
+        $paths = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(self::ROOT, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST);
 
         foreach ($paths as $path) {
             if ($path->isDir()) {
