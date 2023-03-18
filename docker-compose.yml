@@ -3,7 +3,7 @@ version: "3"
 services:
   app:
     build: .
-    image: php-chmod:2.1.2
+    image: php-chmod:2.1.4
     container_name: "php-chmod"
     volumes:
       - ./:/app
