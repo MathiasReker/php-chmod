@@ -28,8 +28,6 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param string[] $excludedNames
      */
     public function setExcludeNames(array $excludedNames): self
@@ -40,8 +38,6 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return string[]
      */
     public function dryRun(): array
@@ -49,9 +45,6 @@ class ScannerService implements ScannerServiceInterface
         return $this->scanner->getPaths();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function fix(): void
     {
         $paths = $this->scanner->getPaths();
@@ -68,9 +61,6 @@ class ScannerService implements ScannerServiceInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setDefaultDirectoryMode(int $defaultDirectoryMode): self
     {
         $this->scanner->setDefaultDirectoryMode($defaultDirectoryMode);
@@ -78,9 +68,6 @@ class ScannerService implements ScannerServiceInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setDefaultFileMode(int $defaultFileMode): self
     {
         $this->scanner->setDefaultFileMode($defaultFileMode);
@@ -89,8 +76,6 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param int[] $excludedFileModes
      */
     public function setExcludedFileModes(array $excludedFileModes): self
@@ -111,8 +96,6 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param string[] $excludedPaths
      */
     public function setExcludedPaths(array $excludedPaths): self
@@ -122,9 +105,6 @@ class ScannerService implements ScannerServiceInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function doIgnoreDirectories(bool $ignoredDirectories = true): self
     {
         $this->scanner->doExcludeDirectories($ignoredDirectories);
@@ -132,9 +112,6 @@ class ScannerService implements ScannerServiceInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function doIgnoreFiles(bool $ignoredFiles = true): self
     {
         $this->scanner->doExcludeFiles($ignoredFiles);
@@ -143,8 +120,6 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param string[] $directories
      */
     public function scan(array $directories): self
@@ -215,8 +190,6 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param string[] $paths
      */
     public function setPaths(array $paths): self
@@ -227,8 +200,6 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param string[] $names
      */
     public function setNames(array $names): self
