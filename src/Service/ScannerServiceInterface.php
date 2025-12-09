@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the php-chmod package.
  * (c) Mathias Reker <github@reker.dk>
@@ -15,7 +16,7 @@ interface ScannerServiceInterface
     /**
      * Returns a collection of concerned directories/files.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function dryRun(): array;
 
@@ -27,7 +28,7 @@ interface ScannerServiceInterface
     /**
      * Build the list of concerned directories/files.
      *
-     * @param string[] $directories
+     * @param list<string> $directories
      */
     public function scan(array $directories): self;
 
@@ -44,42 +45,42 @@ interface ScannerServiceInterface
     /**
      * Set excluded permissions for files.
      *
-     * @param int[] $excludedFileModes
+     * @param list<int> $excludedFileModes
      */
     public function setExcludedFileModes(array $excludedFileModes): self;
 
     /**
      * Set excluded permissions for directories.
      *
-     * @param int[] $excludedDirectoryModes
+     * @param list<int> $excludedDirectoryModes
      */
     public function setExcludedDirectoryModes(array $excludedDirectoryModes): self;
 
     /**
      * Set names that directories/files must match.
      *
-     * @param string[] $excludedNames
+     * @param list<string> $excludedNames
      */
     public function setExcludeNames(array $excludedNames): self;
 
     /**
      * Set names the directories/files must match.
      *
-     * @param string[] $names
+     * @param list<string> $names
      */
     public function setNames(array $names): self;
 
     /**
      * Set excluded paths.
      *
-     * @param string[] $excludedPaths
+     * @param list<string> $excludedPaths
      */
     public function setExcludedPaths(array $excludedPaths): self;
 
     /**
      * Set paths manually. This is an alternative to the scanner.
      *
-     * @param string[] $paths
+     * @param list<string> $paths
      */
     public function setPaths(array $paths): self;
 

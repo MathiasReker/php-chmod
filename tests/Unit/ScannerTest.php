@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the php-chmod package.
  * (c) Mathias Reker <github@reker.dk>
@@ -17,35 +18,33 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @covers \ScannerService
- *
- * @small
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\ScannerService::class)]
+#[\PHPUnit\Framework\Attributes\Small]
 final class ScannerTest extends TestCase
 {
     /**
      * @var array<string, int>
      */
     private const FILE_MODES = [
-        '400.php' => 0400,
-        '444.php' => 0444,
-        '640.php' => 0640,
-        '644.php' => 0644,
-        '666.php' => 0666,
-        '700.php' => 0700,
-        '750.php' => 0750,
-        '755.php' => 0755,
-        'test.sh' => 0777,
+        '400.php' => 0o400,
+        '444.php' => 0o444,
+        '640.php' => 0o640,
+        '644.php' => 0o644,
+        '666.php' => 0o666,
+        '700.php' => 0o700,
+        '750.php' => 0o750,
+        '755.php' => 0o755,
+        'test.sh' => 0o777,
     ];
 
     /**
      * @var array<string, int>
      */
     private const DIRECTORY_MODES = [
-        'foo' => 0700,
-        'bar' => 0750,
-        'baz' => 0777,
+        'foo' => 0o700,
+        'bar' => 0o750,
+        'baz' => 0o777,
     ];
 
     /**
@@ -56,71 +55,71 @@ final class ScannerTest extends TestCase
     public function testFileModeIsNotChangedIfExcludedFileModes(): void
     {
         (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
-            ->setExcludedFileModes([0400])
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
+            ->setExcludedFileModes([0o400])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
-        self::assertSame(0400, $this->getMode(self::ROOT . '/foo/400.php'));
+        self::assertSame(0o400, $this->getMode(self::ROOT . '/foo/400.php'));
     }
 
     private function getMode(string $file): int
     {
-        return fileperms($file) & 0777;
+        return fileperms($file) & 0o777;
     }
 
     public function testFileModeIsChangedIfNotExcludedFileModes(): void
     {
         (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
-        self::assertSame(0644, $this->getMode(self::ROOT . '/foo/400.php'));
+        self::assertSame(0o644, $this->getMode(self::ROOT . '/foo/400.php'));
     }
 
     public function testDirectoryModeIsNotChangedIfExcludedDirectoryModes(): void
     {
         (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
-            ->setExcludedDirectoryModes([0777])
+            ->setExcludedDirectoryModes([0o777])
             ->scan([self::ROOT])
             ->fix();
 
-        self::assertSame(0777, $this->getMode(self::ROOT . '/baz'));
+        self::assertSame(0o777, $this->getMode(self::ROOT . '/baz'));
     }
 
     public function testDirectoryModeIsChangedIfNotExcludedDirectoryModes(): void
     {
         (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
-        self::assertSame(0755, $this->getMode(self::ROOT . '/baz'));
+        self::assertSame(0o755, $this->getMode(self::ROOT . '/baz'));
     }
 
     public function testFileModeIsChangedIfDifferentToDefault(): void
     {
         (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->fix();
 
-        self::assertSame(0644, $this->getMode(self::ROOT . '/bar/666.php'));
+        self::assertSame(0o644, $this->getMode(self::ROOT . '/bar/666.php'));
     }
 
     public function testDefaultFileModeIsNotValid(): void
@@ -129,7 +128,7 @@ final class ScannerTest extends TestCase
 
         (new Scanner())
             ->setDefaultFileMode(-1)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
@@ -142,7 +141,7 @@ final class ScannerTest extends TestCase
 
         (new Scanner())
             ->setDefaultFileMode(1)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
@@ -154,7 +153,7 @@ final class ScannerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultFileMode(0644)
+            ->setDefaultFileMode(0o644)
             ->setDefaultDirectoryMode(-1)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
@@ -167,7 +166,7 @@ final class ScannerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultFileMode(0644)
+            ->setDefaultFileMode(0o644)
             ->setDefaultDirectoryMode(1)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
@@ -180,8 +179,8 @@ final class ScannerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([-1])
             ->scan([self::ROOT])
@@ -193,8 +192,8 @@ final class ScannerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([1])
             ->scan([self::ROOT])
@@ -206,8 +205,8 @@ final class ScannerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([-1])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
@@ -219,8 +218,8 @@ final class ScannerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([1])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
@@ -230,8 +229,8 @@ final class ScannerTest extends TestCase
     public function testDryRun(): void
     {
         $result = (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
@@ -244,43 +243,43 @@ final class ScannerTest extends TestCase
     {
         $result = (new Scanner())
             ->setExcludeNames(['foo'])
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertNotTrue(\in_array('foo', $result, true));
+        self::assertNotContains('foo', $result);
     }
 
     public function testExcludedFiles(): void
     {
         $result = (new Scanner())
             ->setExcludeNames(['444.php'])
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
             ->dryRun();
 
-        self::assertNotTrue(\in_array('444.php', $result, true));
+        self::assertNotContains('444.php', $result);
     }
 
     public function testConcernedPaths(): void
     {
         $result = (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->setPaths([__DIR__ . '/tmp/foo'])
             ->dryRun();
 
         self::assertSame(
-            array_map(static fn ($x) => realpath($x), [__DIR__ . '/tmp/foo']),
-            array_map(static fn ($x) => realpath($x), $result)
+            array_map(realpath(...), [__DIR__ . '/tmp/foo']),
+            array_map(realpath(...), $result)
         );
     }
 
@@ -288,8 +287,8 @@ final class ScannerTest extends TestCase
     {
         $result = (new Scanner())
             ->setExcludeNames(['*.php'])
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
@@ -303,8 +302,8 @@ final class ScannerTest extends TestCase
     {
         $result = (new Scanner())
             ->setExcludeNames(['*.sh'])
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
@@ -318,8 +317,8 @@ final class ScannerTest extends TestCase
     {
         $result = (new Scanner())
             ->setNames(['*.php'])
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedDirectoryModes([])
             ->scan([self::ROOT])
@@ -332,14 +331,14 @@ final class ScannerTest extends TestCase
     public function testExcludedPaths(): void
     {
         $result = (new Scanner())
-            ->setDefaultFileMode(0644)
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultFileMode(0o644)
+            ->setDefaultDirectoryMode(0o755)
             ->setExcludedFileModes([])
             ->setExcludedPaths(['baz'])
             ->scan([self::ROOT])
             ->dryRun();
 
-        $result = array_map(static fn ($x) => realpath($x), $result);
+        $result = array_map(realpath(...), $result);
 
         self::assertTrue([] !== $result
             && !\in_array(realpath(__DIR__ . '/tmp/baz/755.php'), $result, true));
@@ -348,7 +347,7 @@ final class ScannerTest extends TestCase
     public function testOnlyFindFiles(): void
     {
         $result = (new Scanner())
-            ->setDefaultFileMode(0644)
+            ->setDefaultFileMode(0o644)
             ->doIgnoreDirectories()
             ->scan([self::ROOT])
             ->dryRun();
@@ -360,7 +359,7 @@ final class ScannerTest extends TestCase
     public function testNotOnlyFindFiles(): void
     {
         $result = (new Scanner())
-            ->setDefaultFileMode(0644)
+            ->setDefaultFileMode(0o644)
             ->doIgnoreDirectories(false)
             ->scan([self::ROOT])
             ->dryRun();
@@ -372,7 +371,7 @@ final class ScannerTest extends TestCase
     public function testOnlyFindDirectories(): void
     {
         $result = (new Scanner())
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultDirectoryMode(0o755)
             ->doIgnoreFiles()
             ->scan([self::ROOT])
             ->dryRun();
@@ -384,7 +383,7 @@ final class ScannerTest extends TestCase
     public function testNotOnlyFindDirectories(): void
     {
         $result = (new Scanner())
-            ->setDefaultDirectoryMode(0755)
+            ->setDefaultDirectoryMode(0o755)
             ->doIgnoreFiles(false)
             ->scan([self::ROOT])
             ->dryRun();

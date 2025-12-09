@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the php-chmod package.
  * (c) Mathias Reker <github@reker.dk>
@@ -16,9 +17,9 @@ use Symfony\Component\Finder\Finder;
 
 class ScannerService implements ScannerServiceInterface
 {
-    private Scanner $scanner;
+    private readonly Scanner $scanner;
 
-    private Finder $finder;
+    private readonly Finder $finder;
 
     public function __construct()
     {
@@ -28,7 +29,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * @param string[] $excludedNames
+     * @param list<string> $excludedNames
      */
     public function setExcludeNames(array $excludedNames): self
     {
@@ -38,7 +39,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * @return string[]
+     * @return list<string>
      */
     public function dryRun(): array
     {
@@ -76,7 +77,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * @param int[] $excludedFileModes
+     * @param list<int> $excludedFileModes
      */
     public function setExcludedFileModes(array $excludedFileModes): self
     {
@@ -86,7 +87,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * @param int[] $excludedDirectoryModes
+     * @param list<int> $excludedDirectoryModes
      */
     public function setExcludedDirectoryModes(array $excludedDirectoryModes): self
     {
@@ -96,7 +97,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * @param string[] $excludedPaths
+     * @param list<string> $excludedPaths
      */
     public function setExcludedPaths(array $excludedPaths): self
     {
@@ -120,7 +121,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * @param string[] $directories
+     * @param list<string> $directories
      */
     public function scan(array $directories): self
     {
@@ -164,33 +165,33 @@ class ScannerService implements ScannerServiceInterface
     /**
      * Set paths matching the configuration.
      */
-    private function setFilteredPaths(Finder $paths): void
+    private function setFilteredPaths(Finder $finder): void
     {
         $result = [];
 
-        foreach ($paths as $path) {
-            $currentMode = $path->getPerms() & 0777;
+        foreach ($finder as $path) {
+            $mode = $path->getPerms() & 0o777;
 
-            if (
-                \in_array(
-                    $currentMode,
-                    $path->isDir()
-                        ? $this->scanner->getExcludedDirectoryModes()
-                        : $this->scanner->getExcludedFileModes(),
-                    true
-                )
-            ) {
-                continue;
+            $isDir = $path->isDir();
+            $excluded = $isDir
+                ? $this->scanner->getExcludedDirectoryModes()
+                : $this->scanner->getExcludedFileModes();
+
+            $default = $isDir
+                ? $this->scanner->getDefaultDirectoryMode()
+                : $this->scanner->getDefaultFileMode();
+
+            // Skip excluded modes and only include if mode differs from default
+            if (!\in_array($mode, $excluded, true) && $mode !== $default) {
+                $result[] = $path->getRealPath();
             }
-
-            $result[] = $path->getRealPath();
         }
 
         $this->scanner->setPaths($result);
     }
 
     /**
-     * @param string[] $paths
+     * @param list<string> $paths
      */
     public function setPaths(array $paths): self
     {
@@ -200,7 +201,7 @@ class ScannerService implements ScannerServiceInterface
     }
 
     /**
-     * @param string[] $names
+     * @param list<string> $names
      */
     public function setNames(array $names): self
     {

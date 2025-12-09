@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * This file is part of the php-chmod package.
+ * (c) Mathias Reker <github@reker.dk>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+use Rector\Config\RectorConfig;
+use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
+
+return RectorConfig::configure()
+    ->withPhpSets(php81: true)
+    ->withIndent()
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        codingStyle: true,
+        typeDeclarations: true,
+        privatization: true,
+        naming: true,
+        instanceOf: true,
+        earlyReturn: true,
+        rectorPreset: true,
+        phpunitCodeQuality: true,
+        symfonyCodeQuality: true,
+    )
+    ->withAttributesSets()
+    ->withSkipPath(__DIR__ . '/vendor')
+    ->withPaths([__DIR__])
+    ->withoutParallel()
+    ->withSkip(
+        [
+            PreferPHPUnitThisCallRector::class,
+        ]
+    )
+    ->withRules(
+        [
+            ExplicitNullableParamTypeRector::class,
+        ]
+    );

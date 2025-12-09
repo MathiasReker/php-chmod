@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the php-chmod package.
  * (c) Mathias Reker <github@reker.dk>
@@ -19,48 +20,48 @@ final class Scanner
      */
     private const INVALID_PERMISSION = 'Invalid permission.';
 
-    private int $defaultFileMode = 0644;
+    private int $defaultFileMode = 0o644;
 
-    private int $defaultDirectoryMode = 0755;
+    private int $defaultDirectoryMode = 0o755;
 
     private bool $isExcludedFiles = false;
 
     private bool $isExcludedDirectories = false;
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     private array $excludedPaths = [];
 
     /**
-     * @var int[]
+     * @var list<int>
      */
     private array $excludedFileModes = [];
 
     /**
-     * @var int[]
+     * @var list<int>
      */
     private array $excludedDirectoryModes = [];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     private array $paths = [];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     private array $excludedNames = [];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     private array $names = [];
 
     /**
      * Get excluded permissions for files.
      *
-     * @return int[]
+     * @return list<int>
      */
     public function getExcludedFileModes(): array
     {
@@ -70,7 +71,7 @@ final class Scanner
     /**
      * Set excluded permissions for files.
      *
-     * @param int[] $excludedFileModes
+     * @param list<int> $excludedFileModes
      */
     public function setExcludedFileModes(array $excludedFileModes): self
     {
@@ -96,7 +97,7 @@ final class Scanner
     /**
      * Get excluded permissions for directories.
      *
-     * @return int[]
+     * @return list<int>
      */
     public function getExcludedDirectoryModes(): array
     {
@@ -106,7 +107,7 @@ final class Scanner
     /**
      * Set excluded permissions for directories.
      *
-     * @param int[] $excludedDirectoryModes
+     * @param list<int> $excludedDirectoryModes
      */
     public function setExcludedDirectoryModes(array $excludedDirectoryModes): self
     {
@@ -124,7 +125,7 @@ final class Scanner
     /**
      * Get paths matching the search pattern.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getPaths(): array
     {
@@ -134,7 +135,7 @@ final class Scanner
     /**
      * Set paths.
      *
-     * @param string[] $paths
+     * @param list<string> $paths
      */
     public function setPaths(array $paths): self
     {
@@ -146,7 +147,7 @@ final class Scanner
     /**
      * Get names that directories/files must not match.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getExcludedNames(): array
     {
@@ -156,7 +157,7 @@ final class Scanner
     /**
      * Get names that directories/files must match.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getNames(): array
     {
@@ -166,7 +167,7 @@ final class Scanner
     /**
      * Set names the directories/files must match.
      *
-     * @param string[] $names
+     * @param list<string> $names
      */
     public function setNames(array $names): self
     {
@@ -178,7 +179,7 @@ final class Scanner
     /**
      * Get paths that directories/files must not match.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getExcludedPaths(): array
     {
@@ -188,7 +189,7 @@ final class Scanner
     /**
      * Set excluded paths.
      *
-     * @param string[] $excludedPaths
+     * @param list<string> $excludedPaths
      */
     public function setExcludedPaths(array $excludedPaths): self
     {
@@ -200,7 +201,7 @@ final class Scanner
     /**
      * Set names that directories/files must match.
      *
-     * @param string[] $excludedNames
+     * @param list<string> $excludedNames
      */
     public function setExcludeNames(array $excludedNames): self
     {

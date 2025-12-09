@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the php-chmod package.
  * (c) Mathias Reker <github@reker.dk>
@@ -12,15 +13,10 @@ namespace MathiasReker\PhpChmod\Tests\Unit;
 
 final class FileSystemCache
 {
-    private string $directory;
-
-    private int $directoryMode;
-
-    public function __construct(string $directory, int $directoryMode)
-    {
-        $this->directory = $directory;
-
-        $this->directoryMode = $directoryMode;
+    public function __construct(
+        private readonly string $directory,
+        private readonly int $directoryMode,
+    ) {
     }
 
     public function store(string $fileName, int $fileMode): void

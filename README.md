@@ -17,11 +17,10 @@
 
 | Version | PHP  | Documentation |
 |---------|------|---------------|
-| ^2.1    | ^7.4 | current       |
+| ^3.0    | ^8.1 | current       |
 
 ### Requirements
 
-- `PHP` >= 7.4
 - php-extension `ext-mbstring`
 
 ### Installation
